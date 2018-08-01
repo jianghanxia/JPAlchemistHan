@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AlchemistHan.Models;
 using AlchemistHan.Services;
 using Prism.Navigation;
 using Prism.Services;
@@ -14,10 +15,10 @@ using DependencyService = Xamarin.Forms.DependencyService;
 
 namespace AlchemistHan.ViewModels
 {
-	public class MainPageViewModel : BindableBase, INavigationAware
+    public class MainPageViewModel : BindableBase, INavigationAware
     {
-	    private INavigationService NavigationService { get; }
-	    private IPageDialogService PageDialogService { get; }
+        private INavigationService NavigationService { get; }
+        private IPageDialogService PageDialogService { get; }
 
         public bool IsBusy { get; set; } = true;
         public bool IsDownload { get; set; }
@@ -27,61 +28,89 @@ namespace AlchemistHan.ViewModels
         public DelegateCommand DownloadCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
-	    {
-	        NavigationService = navigationService;
-	        PageDialogService = pageDialogService;
+        {
+            NavigationService = navigationService;
+            PageDialogService = pageDialogService;
 
-	        DownloadCommand = new DelegateCommand(OnResourcesCommandExecuted);
+            DownloadCommand = new DelegateCommand(OnResourcesCommandExecuted);
         }
 
-	    private void OnResourcesCommandExecuted()
+        private async void OnResourcesCommandExecuted()
         {
-            Task.Factory.StartNew(async () =>
+            try
             {
-                try
+                IsBusy = false;
+                IsDownload = true;
+                DownloadProgress = 0;
+
+                var path = DependencyService.Get<ISystem>().GetLocalFilePath();
+
+                if (!File.Exists(Path.Combine(path, "JPWord.txt")))
                 {
-                    IsBusy = false;
-                    IsDownload = true;
-                    DownloadProgress = 0;
+                    GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", Path.Combine(path, "JPWord.txt"));
+                }
 
-                    var path = DependencyService.Get<ISystem>().GetLocalFilePath();
-
-                    var ck = await GetWebAsync("https://jianghanxia.gitee.io/jpalchemisthan/list.txt", "");
-                    var list = ck.Split('\n');
-                    var nc = list.Length;
-                    int i = 0;
-
-
-                    Directory.CreateDirectory(Path.GetDirectoryName(path));
-                    foreach (var file in list)
+                List<CBItem> cb = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream(Path.Combine(path, "JPWord.txt"), FileMode.Open), Encoding.UTF8))
+                {
+                    while (!sReader.EndOfStream)
                     {
-                        var name = Path.Combine(path, file);
+                        var res = sReader.ReadLine();
+                        var a = res.Split('\t');
+                        cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
+                    }
+                }
 
-                        using (var wclient = new WebClient())
-                        {
-                            wclient.BaseAddress = "https://jianghanxia.gitee.io/jpalchemisthan/";
-                            wclient.DownloadFile(file, name);
-                        }
+                var fl = cb.Select(i => i.IDstr).Distinct();
+                var nc = fl.Count();
+                int ii = 0;
 
-                        DownloadProgress = i / (float)nc;
-                        i += 1;
+                foreach (var file in fl)
+                {
+                    if (File.Exists(Path.Combine(path, file)))
+                    {
+                        
                     }
 
-                    IsDownload = false;
-                    IsBusy = true;
-                    Message = "完成汉化";
-
-                    await PageDialogService.DisplayAlertAsync("完成", "完成汉化", "OK");
+                    DownloadProgress = ii / (float) nc;
+                    ii += 1;
                 }
-                catch (Exception ee)
+
+                IsDownload = false;
+                IsBusy = true;
+                Message = "完成汉化";
+
+                await PageDialogService.DisplayAlertAsync("完成", "完成汉化", "OK");
+            }
+            catch (Exception ee)
+            {
+                Message = ee.Message;
+                IsDownload = false;
+                IsBusy = true;
+
+                await PageDialogService.DisplayAlertAsync("错误", ee.Message, "OK");
+            }
+        }
+
+        public static void GetFileAsync(string url, string filename)
+        {
+            var request = WebRequest.CreateHttp(url);
+
+            request.Method = "GET";
+            request.Accept = "identity";
+            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
+
+            var response = request.GetResponse();
+
+            using (var steam = response.GetResponseStream())
+            {
+                using (Stream output = File.OpenWrite(filename))
                 {
-                    Message = ee.Message;
-                    IsDownload = false;
-                    IsBusy = true;
-
-                    await PageDialogService.DisplayAlertAsync("错误", ee.Message, "OK");
+                    steam.CopyTo(output);
                 }
-            });
+            }
+
+            response.Close();
         }
 
         public async Task<string> GetWebAsync(string url, string action, string method = "Get", string postData = "")
