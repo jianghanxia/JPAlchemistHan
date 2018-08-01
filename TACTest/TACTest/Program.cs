@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
+using Newtonsoft.Json.Linq;
 
 namespace TACTest
 {
@@ -13,6 +14,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
+            //Init();
             void Init()
             {
                 GetDataAsync("http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/ASSETLIST", "ASSETLISTGF");
@@ -26,32 +28,48 @@ namespace TACTest
 
                 GetLoc("GFLOC/", "GFCB.txt", "http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/", GFcollection);
                 GetLoc("JPLOC/", "JPCB.txt", "https://alchemist-dlc2.gu3.jp/assets/20180801_214aa310b0ba4d327f9b206ecc73fa3324fcce30_566f2/aatc/", JPcollection);
-            }
-            //Init();
 
-            List<CBItem> GFCB = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
-            {
-                while (!sReader.EndOfStream)
+                Directory.CreateDirectory("GFData");
+                foreach (var item in GFcollection.Where(i => i.Path.StartsWith("Data/")))
                 {
-                    var res = sReader.ReadLine();
-                    var a = res.Split('\t');
-                    GFCB.Add(new CBItem { IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3] });
+                    GetFileAsync($"http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/{item.IDStr}", "GFData/" + item.IDStr);
+                    Console.WriteLine(item.IDStr);
+                }
+
+                Directory.CreateDirectory("JPData");
+                foreach (var item in JPcollection.Where(i => i.Path.StartsWith("Data/")))
+                {
+                    GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/20180801_214aa310b0ba4d327f9b206ecc73fa3324fcce30_566f2/aatc/{item.IDStr}", "JPData/" + item.IDStr);
+                    Console.WriteLine(item.IDStr);
                 }
             }
-            ;
 
-            using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
+            //WordList();
+            void WordList()
             {
-                using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                List<CBItem> GFCB = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
                 {
                     while (!sReader.EndOfStream)
                     {
                         var res = sReader.ReadLine();
                         var a = res.Split('\t');
+                        GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+                    }
+                }
 
-                        var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
-                        result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
+                {
+                    using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                    {
+                        while (!sReader.EndOfStream)
+                        {
+                            var res = sReader.ReadLine();
+                            var a = res.Split('\t');
+
+                            var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
+                            result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                        }
                     }
                 }
             }
@@ -107,6 +125,99 @@ namespace TACTest
 
                         Console.WriteLine(file);
                         File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
+                    }
+                }
+            }
+
+            //QuestParam("GFData/35e7c476", "GFQuestParam.txt");
+            //QuestParam("JPData/b9cc206f", "JPQuestParam.txt");
+            void QuestParam(string file,string output)
+            {
+                using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                {
+                    using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
+                    {
+                        var js = JToken.Parse(sReader.ReadToEnd());
+
+                        foreach (var a in js["areas"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["MapEffect"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tMapEffect[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["multitowerFloor"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
+                        }
+
+                        foreach (var a in js["quests"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
+                        }
+
+                        foreach (var a in js["towerFloors"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                        }
+
+                        foreach (var a in js["WeatherSet"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tWeatherSet[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["worlds"].Children())
+                        {
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"35e7c476\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+                    }
+                }
+            }
+
+            //QuestList();
+            void QuestList()
+            {
+                List<CBItem> GFCB = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream(@"GFQuestParam.txt", FileMode.Open), Encoding.UTF8))
+                {
+                    while (!sReader.EndOfStream)
+                    {
+                        var res = sReader.ReadLine();
+                        var a = res.Split('\t');
+                        if (!string.IsNullOrWhiteSpace(a[3]))
+                        {
+                            GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+                        }
+                    }
+                }
+
+                using (var sReader = new StreamReader(new FileStream(@"JPQuestParam.txt", FileMode.Open), Encoding.UTF8))
+                {
+                    using (var result = new StreamWriter(new FileStream(@"JPQuestResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                    {
+                        while (!sReader.EndOfStream)
+                        {
+                            var res = sReader.ReadLine();
+                            var a = res.Split('\t');
+
+                            if (!string.IsNullOrWhiteSpace(a[3]))
+                            {
+                                var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
+                                result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                            }
+                        }
                     }
                 }
             }
