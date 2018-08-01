@@ -68,18 +68,19 @@ namespace AlchemistHan.ViewModels
             IsDownload = true;
             DownloadProgress = 0;
 
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
                     if (!File.Exists(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt")))
                     {
-                        await PageDialogService.DisplayAlertAsync("错误", "先下载数据", "OK");
+                        Message = "先下载数据";
                         return;
                     }
 
                     List<CBItem> cb = new List<CBItem>();
-                    using (var sReader = new StreamReader(new FileStream(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"), FileMode.Open), Encoding.UTF8))
+                    using (var sReader = new StreamReader(new FileStream(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"), FileMode.Open),
+                        Encoding.UTF8))
                     {
                         while (!sReader.EndOfStream)
                         {
@@ -99,7 +100,8 @@ namespace AlchemistHan.ViewModels
                         if (File.Exists(Path.Combine(path, file)))
                         {
                             var fcb = cb.Where(i => i.IDstr == file);
-                            using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
+                            using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress),
+                                Encoding.UTF8))
                             {
                                 using (var f = File.OpenWrite(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp")))
                                 {
@@ -140,16 +142,12 @@ namespace AlchemistHan.ViewModels
                     IsDownload = false;
                     IsBusy = true;
                     Message = "完成汉化";
-
-                    await PageDialogService.DisplayAlertAsync("完成", "完成汉化", "OK");
                 }
                 catch (Exception ee)
                 {
                     Message = ee.Message;
                     IsDownload = false;
                     IsBusy = true;
-
-                    await PageDialogService.DisplayAlertAsync("错误", ee.Message, "OK");
                 }
             });
         }

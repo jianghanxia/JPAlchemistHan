@@ -29,149 +29,87 @@ namespace TACTest
             }
             //Init();
 
-            //List<CBItem> GFCB = new List<CBItem>();
-            //using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
-            //{
-            //    while (!sReader.EndOfStream)
-            //    {
-            //        var res = sReader.ReadLine();
-            //        var a = res.Split('\t');
-            //        GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
-            //    }
-            //}
-            //;
-
-            //using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
-            //{
-            //    using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-            //    {
-            //        while (!sReader.EndOfStream)
-            //        {
-            //            var res = sReader.ReadLine();
-            //            var a = res.Split('\t');
-
-            //            var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
-            //            result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
-            //        }
-            //    }
-            //}
-
-
-            List<CBItem> cb = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream("JPWord.txt", FileMode.Open), Encoding.UTF8))
+            List<CBItem> GFCB = new List<CBItem>();
+            using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
             {
                 while (!sReader.EndOfStream)
                 {
                     var res = sReader.ReadLine();
                     var a = res.Split('\t');
-                    cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
+                    GFCB.Add(new CBItem { IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3] });
+                }
+            }
+            ;
+
+            using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
+            {
+                using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                {
+                    while (!sReader.EndOfStream)
+                    {
+                        var res = sReader.ReadLine();
+                        var a = res.Split('\t');
+
+                        var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
+                        result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                    }
                 }
             }
 
-            var fl = cb.Select(i => i.IDstr).Distinct();
-
-            foreach (var file in fl)
+            //Han();
+            void Han()
             {
-                if (File.Exists("JPLOC/" + file))
+                List<CBItem> cb = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream("JPWord.txt", FileMode.Open), Encoding.UTF8))
                 {
-                    var fcb = cb.Where(i => i.IDstr == file);
-                    using (var sReader = new StreamReader(new FileStream(Path.Combine("JPLOC/", file), FileMode.Open), Encoding.UTF8))
+                    while (!sReader.EndOfStream)
                     {
-                        using (var result = new StreamWriter(new FileStream(@"temp.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                        var res = sReader.ReadLine();
+                        var a = res.Split('\t');
+                        cb.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
+                    }
+                }
+
+                var fl = cb.Select(i => i.IDstr).Distinct();
+
+                foreach (var file in fl)
+                {
+                    if (File.Exists("JPLOC/" + file))
+                    {
+                        var fcb = cb.Where(i => i.IDstr == file);
+                        using (var sReader = new StreamReader(new FileStream(Path.Combine("JPLOC/", file), FileMode.Open), Encoding.UTF8))
                         {
-                            while (!sReader.EndOfStream)
+                            using (var result = new StreamWriter(new FileStream(@"temp.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
                             {
-                                var res = sReader.ReadLine();
-
-                                var a = res.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
-                                if (a.Length > 1 && res != "\r")
+                                while (!sReader.EndOfStream)
                                 {
-                                    var h = fcb.Where(i => i.ID == a[0]);
-                                    if (h.Any())
+                                    var res = sReader.ReadLine();
+
+                                    var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                    if (a.Length > 1 && res != "\r")
                                     {
-                                        a[1] = h.First().Chinese;
-                                    }
+                                        var h = fcb.Where(i => i.ID == a[0]);
+                                        if (h.Any())
+                                        {
+                                            a[1] = h.First().Chinese;
+                                        }
 
-                                    var concat = string.Join("\t", a);
-                                    result.WriteLine(concat);
-                                }
-                                else
-                                {
-                                    result.WriteLine(res);
+                                        var concat = string.Join("\t", a);
+                                        result.WriteLine(concat);
+                                    }
+                                    else
+                                    {
+                                        result.WriteLine(res);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    Console.WriteLine(file);
-                    File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
+                        Console.WriteLine(file);
+                        File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
+                    }
                 }
             }
-
-            //using (var sReader = new StreamReader(new FileStream(@"JPLOC/0a3ea344", FileMode.Open), Encoding.UTF8))
-            //{
-            //    using (var result = new StreamWriter(new FileStream(@"2.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-            //    {
-            //        while (!sReader.EndOfStream)
-            //        {
-            //            var res = sReader.ReadLine();
-
-            //            var a = res.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
-            //            if (a.Length > 1 && res != "\r")
-            //            {
-            //                var h = CB.Where(i => i.Path == "Loc/japanese/EQ_VALENTINE2018_02_a_2d" && i.ID == a[0]);
-            //                if (h.Any())
-            //                {
-            //                    a[1] = h.First().Chinese;
-            //                }
-
-            //                var concat = string.Join("\t", a);
-            //                result.WriteLine(concat);
-            //            }
-            //            else
-            //            {
-            //                result.WriteLine(res);
-            //            }
-            //        }
-            //    }
-            //}
-
-
-            ////http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/e14329af
-
-            //using (var wclient = new WebClient())
-            //{
-            //    wclient.BaseAddress = "http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/";
-            //    //Directory.CreateDirectory(Path.GetDirectoryName("LocalMaps/ev_seiseki_dj_2_ex2_set"));
-            //    wclient.DownloadFile($"35e7c476", "QuestParam");
-            //}
-
-            //using (var file = File.OpenRead("QuestParam"))
-            //{
-            //    string res;
-            //    using (var steam = new ZlibStream(file, CompressionMode.Decompress))
-            //    {
-            //        var sReader = new StreamReader(steam, Encoding.GetEncoding("UTF-8"));
-            //        res = sReader.ReadToEnd();
-            //    }
-            //    ;
-            //}
-
-            //using (var input = File.OpenRead("1.txt"))
-            //{
-            //    using (var raw = File.Create("1"))
-            //    {
-            //        using (Stream compressor = new ZlibStream(raw, CompressionMode.Compress, CompressionLevel.BestCompression))
-            //        {
-            //            byte[] buffer = new byte[4096];
-            //            int n;
-            //            while ((n = input.Read(buffer, 0, buffer.Length)) != 0)
-            //            {
-            //                compressor.Write(buffer, 0, n);
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         public static void GetLoc(string dir, string filename, string url, List<Item> collection)
