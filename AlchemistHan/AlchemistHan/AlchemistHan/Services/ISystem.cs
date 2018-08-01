@@ -9,5 +9,7 @@ namespace AlchemistHan.Services
         void CloseApp();
 
         string GetLocalFilePath();
+
+        string GetPersonalPath();
     }
 }
