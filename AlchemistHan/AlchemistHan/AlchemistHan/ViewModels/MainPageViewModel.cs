@@ -27,6 +27,8 @@ namespace AlchemistHan.ViewModels
         public string Message { get; set; }
 
         public DelegateCommand DownloadDataCommand { get; }
+        public DelegateCommand DownloadSYFontCommand { get; }
+        public DelegateCommand DownloadWRFontCommand { get; }
         public DelegateCommand HHCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
@@ -39,6 +41,21 @@ namespace AlchemistHan.ViewModels
                 IsBusy = false;
                 await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"));
                 await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
+                IsBusy = true;
+            });
+
+            DownloadSYFontCommand = new DelegateCommand(async () =>
+            {
+                IsBusy = false;
+                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/SY", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
+                await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
+                IsBusy = true;
+            });
+            DownloadWRFontCommand = new DelegateCommand(async () =>
+            {
+                IsBusy = false;
+                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/WR", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
+                await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
                 IsBusy = true;
             });
 
@@ -82,7 +99,7 @@ namespace AlchemistHan.ViewModels
                         if (File.Exists(Path.Combine(path, file)))
                         {
                             var fcb = cb.Where(i => i.IDstr == file);
-                            using (var sReader = new StreamReader(new FileStream(Path.Combine(path, file), FileMode.Open), Encoding.UTF8))
+                            using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                             {
                                 using (var f = File.OpenWrite(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp")))
                                 {

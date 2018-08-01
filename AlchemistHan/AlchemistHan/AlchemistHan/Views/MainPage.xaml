@@ -7,6 +7,10 @@
     <StackLayout>
         <Label Text="为谁炼金 日服 汉化工具" />
         <Label Text="汉化群：530060143  炼金鎮守府" />
+        <StackLayout Orientation="Horizontal">
+            <Button Text="下载微软粗黑" Command="{Binding DownloadWRFontCommand}" IsEnabled="{Binding IsBusy}" />
+            <Button Text="下载思源黑体" Command="{Binding DownloadSYFontCommand}" IsEnabled="{Binding IsBusy}" />
+        </StackLayout>
         <Button Text="下载数据" Command="{Binding DownloadDataCommand}" IsEnabled="{Binding IsBusy}" />
         <Button Text="开始汉化" Command="{Binding HHCommand}" IsEnabled="{Binding IsBusy}" />
         <ProgressBar IsVisible="{Binding IsDownload}" Progress="{Binding DownloadProgress}" />
