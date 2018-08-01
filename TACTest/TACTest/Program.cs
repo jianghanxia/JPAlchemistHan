@@ -29,30 +29,82 @@ namespace TACTest
             }
             //Init();
 
-            List<CBItem> GFCB = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
+            //List<CBItem> GFCB = new List<CBItem>();
+            //using (var sReader = new StreamReader(new FileStream(@"GFCB.txt", FileMode.Open), Encoding.UTF8))
+            //{
+            //    while (!sReader.EndOfStream)
+            //    {
+            //        var res = sReader.ReadLine();
+            //        var a = res.Split('\t');
+            //        GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+            //    }
+            //}
+            //;
+
+            //using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
+            //{
+            //    using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            //    {
+            //        while (!sReader.EndOfStream)
+            //        {
+            //            var res = sReader.ReadLine();
+            //            var a = res.Split('\t');
+
+            //            var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
+            //            result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+            //        }
+            //    }
+            //}
+
+
+            List<CBItem> cb = new List<CBItem>();
+            using (var sReader = new StreamReader(new FileStream("JPWord.txt", FileMode.Open), Encoding.UTF8))
             {
                 while (!sReader.EndOfStream)
                 {
                     var res = sReader.ReadLine();
                     var a = res.Split('\t');
-                    GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+                    cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
                 }
             }
-            ;
 
-            using (var sReader = new StreamReader(new FileStream(@"JPCB.txt", FileMode.Open), Encoding.UTF8))
+            var fl = cb.Select(i => i.IDstr).Distinct();
+
+            foreach (var file in fl)
             {
-                using (var result = new StreamWriter(new FileStream(@"JPResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                if (File.Exists("JPLOC/" + file))
                 {
-                    while (!sReader.EndOfStream)
+                    var fcb = cb.Where(i => i.IDstr == file);
+                    using (var sReader = new StreamReader(new FileStream(Path.Combine("JPLOC/", file), FileMode.Open), Encoding.UTF8))
                     {
-                        var res = sReader.ReadLine();
-                        var a = res.Split('\t');
+                        using (var result = new StreamWriter(new FileStream(@"temp.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                        {
+                            while (!sReader.EndOfStream)
+                            {
+                                var res = sReader.ReadLine();
 
-                        var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
-                        result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                                var a = res.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                                if (a.Length > 1 && res != "\r")
+                                {
+                                    var h = fcb.Where(i => i.ID == a[0]);
+                                    if (h.Any())
+                                    {
+                                        a[1] = h.First().Chinese;
+                                    }
+
+                                    var concat = string.Join("\t", a);
+                                    result.WriteLine(concat);
+                                }
+                                else
+                                {
+                                    result.WriteLine(res);
+                                }
+                            }
+                        }
                     }
+
+                    Console.WriteLine(file);
+                    File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
                 }
             }
 
