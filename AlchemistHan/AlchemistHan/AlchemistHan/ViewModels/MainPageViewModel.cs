@@ -41,26 +41,50 @@ namespace AlchemistHan.ViewModels
 
             DownloadDataCommand = new DelegateCommand(async () =>
             {
-                IsBusy = false;
-                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"));
-                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.txt"));
-                await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
-                IsBusy = true;
+                try
+                {
+                    IsBusy = false;
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"));
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.txt"));
+                    await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
+                    IsBusy = true;
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsBusy = true;
+                }
             });
 
             DownloadSYFontCommand = new DelegateCommand(async () =>
             {
-                IsBusy = false;
-                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/SY", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
-                await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
-                IsBusy = true;
+                try
+                {
+                    IsBusy = false;
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/SY", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
+                    await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
+                    IsBusy = true;
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsBusy = true;
+                }
             });
             DownloadWRFontCommand = new DelegateCommand(async () =>
             {
-                IsBusy = false;
-                await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/WR", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
-                await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
-                IsBusy = true;
+                try
+                {
+                    IsBusy = false;
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/WR", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
+                    await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
+                    IsBusy = true;
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsBusy = true;
+                }
             });
 
             HHCommand = new DelegateCommand(OnHHCommandExecuted);
