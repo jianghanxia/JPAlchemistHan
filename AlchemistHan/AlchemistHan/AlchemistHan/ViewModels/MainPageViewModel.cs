@@ -146,7 +146,7 @@ namespace AlchemistHan.ViewModels
 
                                 byte[] byteArray = Encoding.UTF8.GetBytes(sd);
                                 MemoryStream stream = new MemoryStream(byteArray);
-                                using (var f = File.OpenWrite(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp")))
+                                using (var f = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), FileMode.Create))
                                 {
                                     using (var result = new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression))
                                     {
@@ -161,6 +161,7 @@ namespace AlchemistHan.ViewModels
                             }
 
                             File.Copy(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), Path.Combine(path, file), true);
+                            File.Delete(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"));
                         }
                     }
 
@@ -218,7 +219,7 @@ namespace AlchemistHan.ViewModels
                             using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress),
                                 Encoding.UTF8))
                             {
-                                using (var f = File.OpenWrite(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp")))
+                                using (var f = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), FileMode.Create))
                                 {
                                     using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                                     {
@@ -248,6 +249,7 @@ namespace AlchemistHan.ViewModels
                             }
 
                             File.Copy(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), Path.Combine(path, file), true);
+                            File.Delete(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"));
                         }
 
                         DownloadProgress = ii / (float) nc;

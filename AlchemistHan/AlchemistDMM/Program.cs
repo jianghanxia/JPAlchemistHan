@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Ionic.Zlib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -28,11 +29,13 @@ namespace AlchemistDMM
             }
             Directory.CreateDirectory("Data");
 
-            foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")))
+            var cloc = collection.Where(i => i.Path.StartsWith("Loc/"));
+            Parallel.ForEach(cloc, (item) =>
             {
                 GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/{item.IDStr}", "Data/" + item.IDStr);
                 Console.WriteLine($"下载{item.IDStr}");
-            }
+            });
+
             GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f", "Data/b9cc206f");
             GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6", "Data/49744fd6");
 
@@ -65,7 +68,7 @@ namespace AlchemistDMM
                         var fcb = cb.Where(i => i.IDstr == file);
                         using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("Data/", file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                         {
-                            using (var f = File.OpenWrite("temp"))
+                            using (var f = File.Open("temp", FileMode.Create))
                             {
                                 using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                                 {
@@ -95,10 +98,13 @@ namespace AlchemistDMM
                         }
 
                         File.Copy("temp", Path.Combine("Data/", file), true);
+                        File.Delete("temp");
                     }
                 }
             }
 
+            //JSON汉化
+            JsonHan();
             void JsonHan()
             {
                 var cb = new List<CBItem>();
@@ -117,7 +123,7 @@ namespace AlchemistDMM
                 {
                     if (File.Exists("Data/" + file))
                     {
-                        Console.WriteLine($"翻译{file}");
+                        Console.WriteLine($"翻译JSON:{file}");
 
                         var fcb = cb.Where(i => i.IDstr == file);
                         using (var sReader = new StreamReader(new ZlibStream(new FileStream("Data/" + file, FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
@@ -134,7 +140,7 @@ namespace AlchemistDMM
 
                             byte[] byteArray = Encoding.UTF8.GetBytes(sd);
                             MemoryStream stream = new MemoryStream(byteArray);
-                            using (var f = File.OpenWrite("temp"))
+                            using (var f = File.Open("temp", FileMode.Create))
                             {
                                 using (var result = new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression))
                                 {
@@ -149,6 +155,7 @@ namespace AlchemistDMM
                         }
 
                         File.Copy("temp", "Data/" + file, true);
+                        File.Delete("temp");
                     }
                 }
             }
@@ -215,7 +222,7 @@ namespace AlchemistDMM
             string res;
             using (var steam = response.GetResponseStream())
             {
-                using (Stream output = File.OpenWrite(filename))
+                using (Stream output = File.Open(filename, FileMode.Create))
                 {
                     steam.CopyTo(output);
                 }
