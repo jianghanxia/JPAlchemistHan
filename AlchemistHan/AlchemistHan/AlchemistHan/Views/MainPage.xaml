@@ -13,6 +13,7 @@
         </StackLayout>
         <Button Text="下载数据" Command="{Binding DownloadDataCommand}" IsEnabled="{Binding IsBusy}" />
         <Button Text="开始汉化" Command="{Binding HHCommand}" IsEnabled="{Binding IsBusy}" />
+        <Button Text="json汉化" Command="{Binding JsonCommand}" IsEnabled="{Binding IsBusy}" />
         <ProgressBar IsVisible="{Binding IsDownload}" Progress="{Binding DownloadProgress}" />
         <Label Text="{Binding Message}" />
     </StackLayout>

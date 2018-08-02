@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ionic.Zlib.Core" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Prism.Unity.Forms" Version="7.0.0.396" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.5.9" />
     <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />

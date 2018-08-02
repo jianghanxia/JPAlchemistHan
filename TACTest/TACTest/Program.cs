@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Ionic.Zlib;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace TACTest
@@ -129,9 +130,9 @@ namespace TACTest
                 }
             }
 
-            //QuestParam("GFData/35e7c476", "GFQuestParam.txt");
-            //QuestParam("JPData/b9cc206f", "JPQuestParam.txt");
-            void QuestParam(string file,string output)
+            //QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
+            //QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
+            void QuestParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
                 {
@@ -141,56 +142,154 @@ namespace TACTest
 
                         foreach (var a in js["areas"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
                         }
 
                         foreach (var a in js["MapEffect"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tMapEffect[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tMapEffect[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         }
 
                         foreach (var a in js["multitowerFloor"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
                         }
 
                         foreach (var a in js["quests"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
                         }
 
                         foreach (var a in js["towerFloors"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
                         }
 
                         foreach (var a in js["WeatherSet"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tWeatherSet[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tWeatherSet[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         }
 
                         foreach (var a in js["worlds"].Children())
                         {
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"35e7c476\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
                         }
                     }
                 }
             }
 
-            //QuestList();
-            void QuestList()
+            //MasterParam("64a5ea86", "GFData/64a5ea86", "GFMasterParam.txt");
+            //MasterParam("49744fd6", "JPData/49744fd6", "JPMasterParam.txt");
+            void MasterParam(string id, string file, string output)
+            {
+                using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                {
+                    using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
+                    {
+                        var js = JToken.Parse(sReader.ReadToEnd());
+
+                        foreach (var a in js["Ability"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["Artifact"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                        }
+
+                        foreach (var a in js["Award"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["Challenge"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tChallenge[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["ConceptCard"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["Geo"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tGeo[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Item"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tItem[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Job"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tJob[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Skill"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["TobiraCategories"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tTobiraCategories[?(@.category=={a["category"]})].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Trick"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+
+                        foreach (var a in js["Trophy"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tTrophy[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Unit"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].birth\t{a["birth"]}");
+                        }
+
+                        foreach (var a in js["UnitGroup"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tUnitGroup[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        }
+
+                        foreach (var a in js["Weather"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tWeather[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tWeather[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
+                    }
+                }
+            }
+
+            //QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JPMasterResult.txt");
+            //QuestList("GFQuestParam.txt","JPQuestParam.txt","JPQuestResult.txt");
+            void QuestList(string gffile, string jpfile, string resultfile)
             {
                 List<CBItem> GFCB = new List<CBItem>();
-                using (var sReader = new StreamReader(new FileStream(@"GFQuestParam.txt", FileMode.Open), Encoding.UTF8))
+                using (var sReader = new StreamReader(new FileStream(gffile, FileMode.Open), Encoding.UTF8))
                 {
                     while (!sReader.EndOfStream)
                     {
@@ -203,9 +302,9 @@ namespace TACTest
                     }
                 }
 
-                using (var sReader = new StreamReader(new FileStream(@"JPQuestParam.txt", FileMode.Open), Encoding.UTF8))
+                using (var sReader = new StreamReader(new FileStream(jpfile, FileMode.Open), Encoding.UTF8))
                 {
-                    using (var result = new StreamWriter(new FileStream(@"JPQuestResult.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                    using (var result = new StreamWriter(new FileStream(resultfile, FileMode.Create, FileAccess.Write), Encoding.UTF8))
                     {
                         while (!sReader.EndOfStream)
                         {
@@ -218,6 +317,58 @@ namespace TACTest
                                 result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
                             }
                         }
+                    }
+                }
+            }
+
+            JsonHan();
+            void JsonHan()
+            {
+                List<CBItem> cb = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream("JSONWord.txt", FileMode.Open), Encoding.UTF8))
+                {
+                    while (!sReader.EndOfStream)
+                    {
+                        var res = sReader.ReadLine();
+                        var a = res.Split('\t');
+                        cb.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
+                    }
+                }
+
+                var fl = cb.Select(i => i.IDstr).Distinct();
+
+                foreach (var file in fl)
+                {
+                    if (File.Exists("JPData/" + file))
+                    {
+                        var fcb = cb.Where(i => i.IDstr == file);
+                        using (var sReader = new StreamReader(new FileStream(Path.Combine("JPData/", file), FileMode.Open), Encoding.UTF8))
+                        {
+                            var json = JToken.Parse(sReader.ReadToEnd());
+
+                            foreach (var cbi in fcb)
+                            {
+                                var s = json.SelectToken(cbi.ID);
+                                s.Replace(cbi.Chinese);
+                            }
+
+                            var sd = json.ToString(Formatting.None);
+
+                            byte[] byteArray = Encoding.UTF8.GetBytes(sd);
+                            MemoryStream stream = new MemoryStream(byteArray);
+                            using (var raw = File.Create("temp.txt"))
+                            {
+                                byte[] buffer = new byte[4096];
+                                int n;
+                                while ((n = stream.Read(buffer, 0, buffer.Length)) != 0)
+                                {
+                                    raw.Write(buffer, 0, n);
+                                }
+                            }
+                        }
+
+                        Console.WriteLine(file);
+                        File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
                     }
                 }
             }
