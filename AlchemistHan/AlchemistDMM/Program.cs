@@ -43,6 +43,12 @@ namespace AlchemistDMM
             GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", "JPWord.txt");
             GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", "JSONWord.txt");
 
+            if (Directory.Exists("Han"))
+            {
+                Directory.Delete("Han", true);
+            }
+            Directory.CreateDirectory("Han");
+
             //Loc数据汉化
             HanLoc();
             void HanLoc()
@@ -68,7 +74,7 @@ namespace AlchemistDMM
                         var fcb = cb.Where(i => i.IDstr == file);
                         using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("Data/", file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                         {
-                            using (var f = File.Open("temp", FileMode.Create))
+                            using (var f = File.Open(Path.Combine("Han/", file), FileMode.Create))
                             {
                                 using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                                 {
@@ -96,9 +102,6 @@ namespace AlchemistDMM
                                 }
                             }
                         }
-
-                        File.Copy("temp", Path.Combine("Data/", file), true);
-                        File.Delete("temp");
                     }
                 }
             }
@@ -140,7 +143,7 @@ namespace AlchemistDMM
 
                             byte[] byteArray = Encoding.UTF8.GetBytes(sd);
                             MemoryStream stream = new MemoryStream(byteArray);
-                            using (var f = File.Open("temp", FileMode.Create))
+                            using (var f = File.Open(Path.Combine("Han/", file), FileMode.Create))
                             {
                                 using (var result = new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression))
                                 {
@@ -153,12 +156,13 @@ namespace AlchemistDMM
                                 }
                             }
                         }
-
-                        File.Copy("temp", "Data/" + file, true);
-                        File.Delete("temp");
                     }
                 }
             }
+
+            File.Delete("ASSETLIST");
+            File.Delete("JPWord.txt");
+            File.Delete("JSONWord.txt");
         }
 
         public static List<Item> GetCollection(string file)

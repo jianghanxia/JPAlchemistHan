@@ -33,6 +33,8 @@ namespace AlchemistHan.ViewModels
         public DelegateCommand DownloadWRFontCommand { get; }
         public DelegateCommand HHCommand { get; }
         public DelegateCommand JsonCommand { get; }
+        public DelegateCommand RestoreHanCommand { get; }
+        public DelegateCommand RestoreJsonCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
         {
@@ -89,6 +91,80 @@ namespace AlchemistHan.ViewModels
 
             HHCommand = new DelegateCommand(OnHHCommandExecuted);
             JsonCommand = new DelegateCommand(OnJsonCommandExecuted);
+            RestoreHanCommand = new DelegateCommand(OnRestoreHanCommandExecuted);
+            RestoreJsonCommand = new DelegateCommand(OnRestoreJsonCommandExecuted);
+        }
+
+        private void OnRestoreHanCommandExecuted()
+        {
+            IsBusy = false;
+            IsDownload = true;
+            DownloadProgress = 0;
+
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var verj = JToken.Parse(ver);
+
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST",
+                        Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "ASSETLIST"));
+
+                    var collection = GetCollection(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "ASSETLIST"));
+
+                    var path = DependencyService.Get<ISystem>().GetLocalFilePath();
+                    var cloc = collection.Where(i => i.Path.StartsWith("Loc/"));
+                    var nc = cloc.Count();
+                    int ii = 0;
+                    foreach (var item in cloc)
+                    {
+                        await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/{item.IDStr}",
+                            Path.Combine(path, item.IDStr));
+                        DownloadProgress = ii / (float)nc;
+                        ii += 1;
+                    }
+
+                    IsDownload = false;
+                    IsBusy = true;
+                    Message = "还原Loc完成";
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsDownload = false;
+                    IsBusy = true;
+                }
+            });
+        }
+
+        private void OnRestoreJsonCommandExecuted()
+        {
+            IsBusy = false;
+
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var verj = JToken.Parse(ver);
+
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    var path = DependencyService.Get<ISystem>().GetLocalFilePath();
+
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f",
+                        Path.Combine(path, "b9cc206f"));
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6",
+                        Path.Combine(path, "49744fd6"));
+
+                    IsBusy = true;
+                    Message = "还原Json完成";
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsBusy = true;
+                }
+            });
         }
 
         private void OnJsonCommandExecuted()
@@ -269,6 +345,54 @@ namespace AlchemistHan.ViewModels
             });
         }
 
+        public static List<Item> GetCollection(string file)
+        {
+            using (BinaryReader binaryReader = new BinaryReader(File.Open(file, FileMode.Open)))
+            {
+                var mRevision = binaryReader.ReadInt32();
+                var num = binaryReader.ReadInt32();
+                var collection = new List<Item>();
+
+                for (int i = 0; i < num; i++)
+                {
+                    var item = new Item();
+                    item.ID = binaryReader.ReadUInt32();
+                    item.IDStr = item.ID.ToString("X8").ToLower();
+                    item.Size = binaryReader.ReadInt32();
+                    item.CompressedSize = binaryReader.ReadInt32();
+                    item.Path = binaryReader.ReadString();
+                    item.PathHash = binaryReader.ReadInt32();
+                    item.Hash = binaryReader.ReadUInt32();
+                    item.Flags = (AssetBundleFlags)binaryReader.ReadInt32();
+
+                    int num2 = binaryReader.ReadInt32();
+                    for (int j = 0; j < num2; j++)
+                    {
+                        int index = binaryReader.ReadInt32();
+                        item.Dependencies.Add(index);
+                    }
+
+                    num2 = binaryReader.ReadInt32();
+                    for (int k = 0; k < num2; k++)
+                    {
+                        int index = binaryReader.ReadInt32();
+                        item.AdditionalDependencies.Add(index);
+                    }
+
+                    num2 = binaryReader.ReadInt32();
+                    for (int l = 0; l < num2; l++)
+                    {
+                        int index = binaryReader.ReadInt32();
+                        item.AdditionalStreamingAssets.Add(index);
+                    }
+
+                    collection.Add(item);
+                }
+
+                return collection;
+            }
+        }
+
         public static async Task GetFileAsync(string url, string filename)
         {
             var request = WebRequest.CreateHttp(url);
@@ -281,13 +405,39 @@ namespace AlchemistHan.ViewModels
 
             using (var steam = response.GetResponseStream())
             {
-                using (Stream output = File.OpenWrite(filename))
+                using (Stream output = File.Open(filename, FileMode.Create))
                 {
                     steam.CopyTo(output);
                 }
             }
 
             response.Close();
+        }
+
+        public static string GetWeb(string url, string method = "Get", string postData = "")
+        {
+            var request = WebRequest.CreateHttp(url);
+            request.Method = method.ToUpper();
+
+            if (method == "Post" && postData != "")
+            {
+                request.ContentType = "application/x-www-form-urlencoded";
+                var bytes = Encoding.UTF8.GetBytes(postData);
+                var stream = request.GetRequestStream();
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            var response = request.GetResponse();
+
+            using (var stream = response.GetResponseStream())
+            {
+                using (var sReader = new StreamReader(stream, Encoding.GetEncoding("UTF-8")))
+                {
+                    var res = sReader.ReadToEnd();
+                    return res;
+                }
+            }
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
