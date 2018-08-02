@@ -278,6 +278,7 @@ namespace AlchemistDMM
         public string Path;
         public int PathHash;
         public uint Hash;
+        public string HashStr => Hash.ToString("X8").ToLower();
         public AssetBundleFlags Flags;
         public List<int> Dependencies = new List<int>();
         public List<int> AdditionalDependencies = new List<int>();
