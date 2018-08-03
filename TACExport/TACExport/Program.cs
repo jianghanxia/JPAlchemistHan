@@ -75,61 +75,6 @@ namespace TACTest
                 }
             }
 
-            //Han();
-            void Han()
-            {
-                List<CBItem> cb = new List<CBItem>();
-                using (var sReader = new StreamReader(new FileStream("JPWord.txt", FileMode.Open), Encoding.UTF8))
-                {
-                    while (!sReader.EndOfStream)
-                    {
-                        var res = sReader.ReadLine();
-                        var a = res.Split('\t');
-                        cb.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
-                    }
-                }
-
-                var fl = cb.Select(i => i.IDstr).Distinct();
-
-                foreach (var file in fl)
-                {
-                    if (File.Exists("JPLOC/" + file))
-                    {
-                        var fcb = cb.Where(i => i.IDstr == file);
-                        using (var sReader = new StreamReader(new FileStream(Path.Combine("JPLOC/", file), FileMode.Open), Encoding.UTF8))
-                        {
-                            using (var result = new StreamWriter(new FileStream(@"temp.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-                            {
-                                while (!sReader.EndOfStream)
-                                {
-                                    var res = sReader.ReadLine();
-
-                                    var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if (a.Length > 1 && res != "\r")
-                                    {
-                                        var h = fcb.Where(i => i.ID == a[0]);
-                                        if (h.Any())
-                                        {
-                                            a[1] = h.First().Chinese;
-                                        }
-
-                                        var concat = string.Join("\t", a);
-                                        result.WriteLine(concat);
-                                    }
-                                    else
-                                    {
-                                        result.WriteLine(res);
-                                    }
-                                }
-                            }
-                        }
-
-                        Console.WriteLine(file);
-                        File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
-                    }
-                }
-            }
-
             //QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
             //QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
             void QuestParam(string id, string file, string output)
@@ -284,8 +229,9 @@ namespace TACTest
                 }
             }
 
-            //QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JPMasterResult.txt");
-            //QuestList("GFQuestParam.txt","JPQuestParam.txt","JPQuestResult.txt");
+            //File.Delete("JSONResult.txt");
+            //QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JSONResult.txt");
+            //QuestList("GFQuestParam.txt","JPQuestParam.txt","JSONResult.txt");
             void QuestList(string gffile, string jpfile, string resultfile)
             {
                 List<CBItem> GFCB = new List<CBItem>();
@@ -304,7 +250,7 @@ namespace TACTest
 
                 using (var sReader = new StreamReader(new FileStream(jpfile, FileMode.Open), Encoding.UTF8))
                 {
-                    using (var result = new StreamWriter(new FileStream(resultfile, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+                    using (var result = new StreamWriter(new FileStream(resultfile, FileMode.OpenOrCreate, FileAccess.Write), Encoding.UTF8))
                     {
                         while (!sReader.EndOfStream)
                         {
@@ -321,58 +267,48 @@ namespace TACTest
                 }
             }
 
-            //JsonHan();
-            void JsonHan()
+            WikiList("wiki.txt", "JSONResult.txt", "JSONWord.txt");
+            void WikiList(string gffile, string jpfile, string resultfile)
             {
-                List<CBItem> cb = new List<CBItem>();
-                using (var sReader = new StreamReader(new FileStream("JSONWord.txt", FileMode.Open), Encoding.UTF8))
+                List<CBItem> wiki = new List<CBItem>();
+                using (var sReader = new StreamReader(new FileStream(gffile, FileMode.Open), Encoding.UTF8))
                 {
                     while (!sReader.EndOfStream)
                     {
                         var res = sReader.ReadLine();
                         var a = res.Split('\t');
-                        cb.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
+                        if (!string.IsNullOrWhiteSpace(a[1]))
+                        {
+                            wiki.Add(new CBItem {Path = a[0], Chinese = a[1]});
+                        }
                     }
                 }
 
-                var fl = cb.Select(i => i.IDstr).Distinct();
-
-                foreach (var file in fl)
+                using (var sReader = new StreamReader(new FileStream(jpfile, FileMode.Open), Encoding.UTF8))
                 {
-                    if (File.Exists("JPData/" + file))
+                    using (var result = new StreamWriter(new FileStream(resultfile, FileMode.Create, FileAccess.Write), Encoding.UTF8))
                     {
-                        var fcb = cb.Where(i => i.IDstr == file);
-                        using (var sReader = new StreamReader(new FileStream(Path.Combine("JPData/", file), FileMode.Open), Encoding.UTF8))
+                        while (!sReader.EndOfStream)
                         {
-                            var json = JToken.Parse(sReader.ReadToEnd());
+                            var res = sReader.ReadLine();
+                            var a = res.Split('\t');
 
-                            foreach (var cbi in fcb)
+                            var h = wiki.Where(i => i.Path == a[2]);
+                            if (h.Any())
                             {
-                                var s = json.SelectToken(cbi.ID);
-                                s.Replace(cbi.Chinese);
+                                result.WriteLine($"{a[0]}\t{a[2]}\t{h.First().Chinese}");
                             }
-
-                            var sd = json.ToString(Formatting.None);
-
-                            byte[] byteArray = Encoding.UTF8.GetBytes(sd);
-                            MemoryStream stream = new MemoryStream(byteArray);
-                            using (var raw = File.Create("temp.txt"))
+                            else
                             {
-                                byte[] buffer = new byte[4096];
-                                int n;
-                                while ((n = stream.Read(buffer, 0, buffer.Length)) != 0)
+                                if (!string.IsNullOrWhiteSpace(a[4]))
                                 {
-                                    raw.Write(buffer, 0, n);
+                                    result.WriteLine($"{a[0]}\t{a[2]}\t{a[4]}");
                                 }
                             }
                         }
-
-                        Console.WriteLine(file);
-                        File.Copy("temp.txt", Path.Combine("JPLOC/", file), true);
                     }
                 }
             }
-
         }
 
         public static void GetLoc(string dir, string filename, string url, List<Item> collection)
