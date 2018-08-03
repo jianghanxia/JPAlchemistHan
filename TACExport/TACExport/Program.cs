@@ -15,7 +15,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            Init();
+            //Init();
             void Init()
             {
                 GetDataAsync("http://update-alccn-prod.ssl.91dena.cn/assets/40019/aatc/ASSETLIST", "ASSETLISTGF");
@@ -45,7 +45,7 @@ namespace TACTest
                 }
             }
 
-            WordList();
+            //WordList();
             void WordList()
             {
                 List<CBItem> GFCB = new List<CBItem>();
@@ -130,8 +130,8 @@ namespace TACTest
                 }
             }
 
-            QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
-            QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
+            //QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
+            //QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
             void QuestParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
@@ -187,8 +187,8 @@ namespace TACTest
                 }
             }
 
-            MasterParam("64a5ea86", "GFData/64a5ea86", "GFMasterParam.txt");
-            MasterParam("49744fd6", "JPData/49744fd6", "JPMasterParam.txt");
+            //MasterParam("64a5ea86", "GFData/64a5ea86", "GFMasterParam.txt");
+            //MasterParam("49744fd6", "JPData/49744fd6", "JPMasterParam.txt");
             void MasterParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
@@ -284,8 +284,8 @@ namespace TACTest
                 }
             }
 
-            QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JPMasterResult.txt");
-            QuestList("GFQuestParam.txt","JPQuestParam.txt","JPQuestResult.txt");
+            //QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JPMasterResult.txt");
+            //QuestList("GFQuestParam.txt","JPQuestParam.txt","JPQuestResult.txt");
             void QuestList(string gffile, string jpfile, string resultfile)
             {
                 List<CBItem> GFCB = new List<CBItem>();
@@ -372,6 +372,7 @@ namespace TACTest
                     }
                 }
             }
+
         }
 
         public static void GetLoc(string dir, string filename, string url, List<Item> collection)

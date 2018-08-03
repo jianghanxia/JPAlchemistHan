@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TACTest", "TACTest\TACTest.csproj", "{241730F0-F535-42AD-9C5B-8B776CCCD31D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TACExport", "TACExport\TACExport.csproj", "{241730F0-F535-42AD-9C5B-8B776CCCD31D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
