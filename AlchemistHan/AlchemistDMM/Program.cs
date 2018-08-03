@@ -36,12 +36,12 @@ namespace AlchemistDMM
                 Console.WriteLine($"下载{item.IDStr}");
             });
 
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f", "Data/b9cc206f");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6", "Data/49744fd6");
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f", "Data/b9cc206f");
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6", "Data/49744fd6");
 
             Console.WriteLine("下载汉化数据");
             GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", "JPWord.txt");
-            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", "JSONWord.txt");
+            //GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", "JSONWord.txt");
 
             if (Directory.Exists("Han"))
             {
@@ -107,7 +107,7 @@ namespace AlchemistDMM
             }
 
             //JSON汉化
-            JsonHan();
+            //JsonHan();
             void JsonHan()
             {
                 var cb = new List<CBItem>();
@@ -162,7 +162,10 @@ namespace AlchemistDMM
 
             File.Delete("ASSETLIST");
             File.Delete("JPWord.txt");
-            File.Delete("JSONWord.txt");
+            //File.Delete("JSONWord.txt");
+
+            Console.WriteLine("汉化完成！");
+            Console.Read();
         }
 
         public static List<Item> GetCollection(string file)

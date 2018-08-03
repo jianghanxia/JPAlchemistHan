@@ -5,21 +5,15 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="AlchemistHan.Views.MainPage" Title="为谁炼金汉化工具">
     <StackLayout>
-        <Label Text="为谁炼金日服汉化工具 1.7" />
+        <Label Text="为谁炼金日服汉化工具 1.8" />
         <Label Text="汉化群：530060143  炼金鎮守府" />
         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
             <Button Text="下载微软粗黑" Command="{Binding DownloadWRFontCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
             <Button Text="下载思源黑体" Command="{Binding DownloadSYFontCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
         </StackLayout>
         <Button Text="下载数据" Command="{Binding DownloadDataCommand}" IsEnabled="{Binding IsBusy}" />
-        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-            <Button Text="Loc汉化" Command="{Binding HHCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-            <Button Text="json汉化" Command="{Binding JsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-        </StackLayout>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-            <Button Text="还原Loc" Command="{Binding RestoreHanCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-            <Button Text="还原json" Command="{Binding RestoreJsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-        </StackLayout>
+        <Button Text="开始汉化" Command="{Binding HHCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
+        <Button Text="还原汉化" Command="{Binding RestoreHanCommand}" HorizontalOptions="FillAndExpand" Margin="0,20,0,0"  IsEnabled="{Binding IsBusy}" />
         <ProgressBar IsVisible="{Binding IsDownload}" Progress="{Binding DownloadProgress}" />
         <Label Text="{Binding Message}" />
     </StackLayout>
