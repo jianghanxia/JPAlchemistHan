@@ -140,23 +140,23 @@ namespace TACTest
                     {
                         var js = JToken.Parse(sReader.ReadToEnd());
 
-                        foreach (var a in js["areas"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            //wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        }
+                        //foreach (var a in js["areas"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tareas[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
 
                         //foreach (var a in js["MapEffect"].Children())
                         //{
                         //    wf.WriteLine($"{id}\tData/QuestParam\tMapEffect[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         //}
 
-                        //foreach (var a in js["multitowerFloor"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
-                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
-                        //}
+                        foreach (var a in js["multitowerFloor"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
+                        }
 
                         foreach (var a in js["quests"].Children())
                         {
@@ -166,23 +166,23 @@ namespace TACTest
                             wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
                         }
 
-                        //foreach (var a in js["towerFloors"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
-                        //    wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
-                        //}
+                        foreach (var a in js["towerFloors"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                        }
 
                         //foreach (var a in js["WeatherSet"].Children())
                         //{
                         //    wf.WriteLine($"{id}\tData/QuestParam\tWeatherSet[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         //}
 
-                        //foreach (var a in js["worlds"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        //}
+                        foreach (var a in js["worlds"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
                     }
                 }
             }
@@ -197,34 +197,34 @@ namespace TACTest
                     {
                         var js = JToken.Parse(sReader.ReadToEnd());
 
-                        //foreach (var a in js["Ability"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        //}
+                        foreach (var a in js["Ability"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
 
-                        //foreach (var a in js["Artifact"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
-                        //}
+                        foreach (var a in js["Artifact"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                        }
 
-                        //foreach (var a in js["Award"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        //}
+                        foreach (var a in js["Award"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
 
                         foreach (var a in js["Challenge"].Children())
                         {
                             wf.WriteLine($"{id}\tData/MasterParam\tChallenge[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         }
 
-                        //foreach (var a in js["ConceptCard"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        //}
+                        foreach (var a in js["ConceptCard"].Children())
+                        {
+                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        }
 
                         //foreach (var a in js["Geo"].Children())
                         //{
@@ -244,19 +244,19 @@ namespace TACTest
                         foreach (var a in js["Skill"].Children())
                         {
                             wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            //wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
                         }
 
-                        //foreach (var a in js["TobiraCategories"].Children())
-                        //{
-                        //    wf.WriteLine($"{id}\tData/MasterParam\tTobiraCategories[?(@.category=={a["category"]})].name\t{a["name"]}");
-                        //}
-
-                        foreach (var a in js["Trick"].Children())
+                        foreach (var a in js["TobiraCategories"].Children())
                         {
-                            wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            //wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                            wf.WriteLine($"{id}\tData/MasterParam\tTobiraCategories[?(@.category=={a["category"]})].name\t{a["name"]}");
                         }
+
+                        //foreach (var a in js["Trick"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
 
                         foreach (var a in js["Trophy"].Children())
                         {
