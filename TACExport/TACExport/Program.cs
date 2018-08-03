@@ -75,8 +75,8 @@ namespace TACTest
                 }
             }
 
-            QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
-            QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
+            //QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
+            //QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
             void QuestParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
@@ -132,8 +132,8 @@ namespace TACTest
                 }
             }
 
-            //MasterParam("64a5ea86", "GFData/64a5ea86", "GFMasterParam.txt");
-            //MasterParam("49744fd6", "JPData/49744fd6", "JPMasterParam.txt");
+            MasterParam("64a5ea86", "GFData/64a5ea86", "GFMasterParam.txt");
+            MasterParam("49744fd6", "JPData/49744fd6", "JPMasterParam.txt");
             void MasterParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
@@ -142,34 +142,34 @@ namespace TACTest
                     {
                         var js = JToken.Parse(sReader.ReadToEnd());
 
-                        foreach (var a in js["Ability"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        }
+                        //foreach (var a in js["Ability"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tAbility[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
 
-                        foreach (var a in js["Artifact"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            //wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
-                        }
+                        //foreach (var a in js["Artifact"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    //wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                        //}
 
-                        foreach (var a in js["Award"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        }
+                        //foreach (var a in js["Award"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tAward[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
 
-                        foreach (var a in js["Challenge"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tChallenge[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        }
+                        //foreach (var a in js["Challenge"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tChallenge[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //}
 
-                        foreach (var a in js["ConceptCard"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        }
+                        //foreach (var a in js["ConceptCard"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tConceptCard[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
 
                         //foreach (var a in js["Geo"].Children())
                         //{
@@ -188,14 +188,14 @@ namespace TACTest
 
                         foreach (var a in js["Skill"].Children())
                         {
-                            wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                            //wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                             wf.WriteLine($"{id}\tData/MasterParam\tSkill[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
                         }
 
-                        foreach (var a in js["TobiraCategories"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tTobiraCategories[?(@.category=={a["category"]})].name\t{a["name"]}");
-                        }
+                        //foreach (var a in js["TobiraCategories"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tTobiraCategories[?(@.category=={a["category"]})].name\t{a["name"]}");
+                        //}
 
                         //foreach (var a in js["Trick"].Children())
                         //{
@@ -203,10 +203,10 @@ namespace TACTest
                         //    wf.WriteLine($"{id}\tData/MasterParam\tTrick[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
                         //}
 
-                        foreach (var a in js["Trophy"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tTrophy[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        }
+                        //foreach (var a in js["Trophy"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tTrophy[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //}
 
                         foreach (var a in js["Unit"].Children())
                         {
@@ -215,10 +215,10 @@ namespace TACTest
                             wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].birth\t{a["birth"]}");
                         }
 
-                        foreach (var a in js["UnitGroup"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/MasterParam\tUnitGroup[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                        }
+                        //foreach (var a in js["UnitGroup"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/MasterParam\tUnitGroup[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //}
 
                         //foreach (var a in js["Weather"].Children())
                         //{
@@ -229,8 +229,8 @@ namespace TACTest
                 }
             }
 
-            //File.Delete("JSONResult.txt");
-            //QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JSONResult.txt");
+            File.Delete("JSONResult.txt");
+            QuestList("GFMasterParam.txt", "JPMasterParam.txt", "JSONResult.txt");
             //QuestList("GFQuestParam.txt","JPQuestParam.txt","JSONResult.txt");
             void QuestList(string gffile, string jpfile, string resultfile)
             {
