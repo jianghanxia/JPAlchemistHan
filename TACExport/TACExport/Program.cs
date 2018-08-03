@@ -55,7 +55,7 @@ namespace TACTest
                     {
                         var res = sReader.ReadLine();
                         var a = res.Split('\t');
-                        GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+                        GFCB.Add(new CBItem { IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3] });
                     }
                 }
 
@@ -75,8 +75,8 @@ namespace TACTest
                 }
             }
 
-            //QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
-            //QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
+            QuestParam("35e7c476", "GFData/35e7c476", "GFQuestParam.txt");
+            QuestParam("b9cc206f", "JPData/b9cc206f", "JPQuestParam.txt");
             void QuestParam(string id, string file, string output)
             {
                 using (var wf = new StreamWriter(new FileStream(output, FileMode.Create, FileAccess.Write), Encoding.UTF8))
@@ -96,18 +96,18 @@ namespace TACTest
                         //    wf.WriteLine($"{id}\tData/QuestParam\tMapEffect[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         //}
 
-                        foreach (var a in js["multitowerFloor"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
-                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
-                        }
+                        //foreach (var a in js["multitowerFloor"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].title\t{a["title"]}");
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tmultitowerFloor[?(@.id=={a["id"]})].cond\t{a["cond"]}");
+                        //}
 
                         foreach (var a in js["quests"].Children())
                         {
                             wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                             wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                            wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                            //wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
                             wf.WriteLine($"{id}\tData/QuestParam\tquests[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
                         }
 
@@ -115,7 +115,7 @@ namespace TACTest
                         {
                             wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].title\t{a["title"]}");
                             wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
+                            //wf.WriteLine($"{id}\tData/QuestParam\ttowerFloors[?(@.iname=='{a["iname"]}')].cond\t{a["cond"]}");
                         }
 
                         //foreach (var a in js["WeatherSet"].Children())
@@ -123,11 +123,11 @@ namespace TACTest
                         //    wf.WriteLine($"{id}\tData/QuestParam\tWeatherSet[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
                         //}
 
-                        foreach (var a in js["worlds"].Children())
-                        {
-                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
-                        }
+                        //foreach (var a in js["worlds"].Children())
+                        //{
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
+                        //    wf.WriteLine($"{id}\tData/QuestParam\tworlds[?(@.iname=='{a["iname"]}')].expr\t{a["expr"]}");
+                        //}
                     }
                 }
             }
@@ -151,7 +151,7 @@ namespace TACTest
                         foreach (var a in js["Artifact"].Children())
                         {
                             wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                            //wf.WriteLine($"{id}\tData/MasterParam\tArtifact[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
                         }
 
                         foreach (var a in js["Award"].Children())
@@ -211,7 +211,7 @@ namespace TACTest
                         foreach (var a in js["Unit"].Children())
                         {
                             wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].name\t{a["name"]}");
-                            wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
+                            //wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].tag\t{a["tag"]}");
                             wf.WriteLine($"{id}\tData/MasterParam\tUnit[?(@.iname=='{a["iname"]}')].birth\t{a["birth"]}");
                         }
 
@@ -243,7 +243,7 @@ namespace TACTest
                         var a = res.Split('\t');
                         if (!string.IsNullOrWhiteSpace(a[3]))
                         {
-                            GFCB.Add(new CBItem {IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3]});
+                            GFCB.Add(new CBItem { IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3] });
                         }
                     }
                 }
@@ -279,7 +279,7 @@ namespace TACTest
                         var a = res.Split('\t');
                         if (!string.IsNullOrWhiteSpace(a[1]))
                         {
-                            wiki.Add(new CBItem {Path = a[0], Chinese = a[1]});
+                            wiki.Add(new CBItem { Path = a[0], Chinese = a[1] });
                         }
                     }
                 }
@@ -293,16 +293,19 @@ namespace TACTest
                             var res = sReader.ReadLine();
                             var a = res.Split('\t');
 
-                            var h = wiki.Where(i => i.Path == a[2]);
-                            if (h.Any())
+                            if (!string.IsNullOrWhiteSpace(res))
                             {
-                                result.WriteLine($"{a[0]}\t{a[2]}\t{h.First().Chinese}");
-                            }
-                            else
-                            {
-                                if (!string.IsNullOrWhiteSpace(a[4]))
+                                var h = wiki.Where(i => i.Path == a[2]);
+                                if (h.Any())
                                 {
-                                    result.WriteLine($"{a[0]}\t{a[2]}\t{a[4]}");
+                                    result.WriteLine($"{a[0]}\t{a[2]}\t{h.First().Chinese}");
+                                }
+                                else
+                                {
+                                    if (a.Length > 4 && !string.IsNullOrWhiteSpace(a[4]))
+                                    {
+                                        result.WriteLine($"{a[0]}\t{a[2]}\t{a[4]}");
+                                    }
                                 }
                             }
                         }
@@ -331,7 +334,7 @@ namespace TACTest
                         {
                             var s = sReader.ReadLine();
 
-                            var a = s.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                            var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                             if (a.Length > 1 && s != "\r")
                             {
                                 var tt = collection.Single(i => i.IDStr == file.Name);
@@ -372,7 +375,7 @@ namespace TACTest
                     item.Path = binaryReader.ReadString();
                     item.PathHash = binaryReader.ReadInt32();
                     item.Hash = binaryReader.ReadUInt32();
-                    item.Flags = (AssetBundleFlags) binaryReader.ReadInt32();
+                    item.Flags = (AssetBundleFlags)binaryReader.ReadInt32();
 
                     int num2 = binaryReader.ReadInt32();
                     for (int j = 0; j < num2; j++)
