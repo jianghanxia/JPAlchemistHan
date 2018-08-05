@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ExcelDataReader;
 using Ionic.Zlib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -36,12 +38,8 @@ namespace AlchemistDMM
                 Console.WriteLine($"下载{item.IDStr}");
             });
 
-            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f", "Data/b9cc206f");
-            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6", "Data/49744fd6");
-
             Console.WriteLine("下载汉化数据");
-            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", "JPWord.txt");
-            //GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.txt", "JSONWord.txt");
+            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", "JPResult.xlsx");
 
             if (Directory.Exists("Han"))
             {
@@ -54,13 +52,20 @@ namespace AlchemistDMM
             void HanLoc()
             {
                 var cb = new List<CBItem>();
-                using (var sReader = new StreamReader(new FileStream("JPWord.txt", FileMode.Open), Encoding.UTF8))
+                using (var stream = File.Open("JPResult.xlsx", FileMode.Open, FileAccess.Read))
                 {
-                    while (!sReader.EndOfStream)
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
                     {
-                        var res = sReader.ReadLine();
-                        var a = res.Split('\t');
-                        cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
+                        do
+                        {
+                            while (reader.Read())
+                            {
+                                if (!string.IsNullOrWhiteSpace(reader.GetString(4)))
+                                {
+                                    cb.Add(new CBItem { IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4) });
+                                }
+                            }
+                        } while (reader.NextResult());
                     }
                 }
 
@@ -106,63 +111,8 @@ namespace AlchemistDMM
                 }
             }
 
-            //JSON汉化
-            //JsonHan();
-            void JsonHan()
-            {
-                var cb = new List<CBItem>();
-                using (var sReader = new StreamReader(new FileStream("JSONWord.txt", FileMode.Open), Encoding.UTF8))
-                {
-                    while (!sReader.EndOfStream)
-                    {
-                        var res = sReader.ReadLine();
-                        var a = res.Split('\t');
-                        cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
-                    }
-                }
-
-                var fl = cb.Select(i => i.IDstr).Distinct();
-                foreach (var file in fl)
-                {
-                    if (File.Exists("Data/" + file))
-                    {
-                        Console.WriteLine($"翻译JSON:{file}");
-
-                        var fcb = cb.Where(i => i.IDstr == file);
-                        using (var sReader = new StreamReader(new ZlibStream(new FileStream("Data/" + file, FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
-                        {
-                            var json = JToken.Parse(sReader.ReadToEnd());
-
-                            foreach (var cbi in fcb)
-                            {
-                                var s = json.SelectToken(cbi.ID);
-                                s.Replace(cbi.Chinese);
-                            }
-
-                            var sd = json.ToString(Formatting.None);
-
-                            byte[] byteArray = Encoding.UTF8.GetBytes(sd);
-                            MemoryStream stream = new MemoryStream(byteArray);
-                            using (var f = File.Open(Path.Combine("Han/", file), FileMode.Create))
-                            {
-                                using (var result = new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression))
-                                {
-                                    byte[] buffer = new byte[4096];
-                                    int n;
-                                    while ((n = stream.Read(buffer, 0, buffer.Length)) != 0)
-                                    {
-                                        result.Write(buffer, 0, n);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
             File.Delete("ASSETLIST");
-            File.Delete("JPWord.txt");
-            //File.Delete("JSONWord.txt");
+            File.Delete("JPResult.xlsx");
 
             Console.WriteLine("汉化完成！");
             Console.Read();
