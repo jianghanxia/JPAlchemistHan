@@ -13,6 +13,7 @@ using Ionic.Zlib;
 using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Prism.Services;
+using ExcelDataReader;
 using DependencyService = Xamarin.Forms.DependencyService;
 
 namespace AlchemistHan.ViewModels
@@ -43,7 +44,7 @@ namespace AlchemistHan.ViewModels
                 try
                 {
                     IsBusy = false;
-                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"));
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
                     IsBusy = true;
                 }
@@ -142,21 +143,27 @@ namespace AlchemistHan.ViewModels
             {
                 try
                 {
-                    if (!File.Exists(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt")))
+                    if (!File.Exists(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx")))
                     {
                         Message = "先下载数据";
                         return;
                     }
 
                     List<CBItem> cb = new List<CBItem>();
-                    using (var sReader = new StreamReader(new FileStream(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPWord.txt"), FileMode.Open),
-                        Encoding.UTF8))
+                    using (var stream = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"), FileMode.Open, FileAccess.Read))
                     {
-                        while (!sReader.EndOfStream)
+                        using (var reader = ExcelReaderFactory.CreateReader(stream))
                         {
-                            var res = sReader.ReadLine();
-                            var a = res.Split('\t');
-                            cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
+                            do
+                            {
+                                while (reader.Read())
+                                {
+                                    if (!string.IsNullOrWhiteSpace(reader.GetString(4)))
+                                    {
+                                        cb.Add(new CBItem {IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4)});
+                                    }
+                                }
+                            } while (reader.NextResult());
                         }
                     }
 

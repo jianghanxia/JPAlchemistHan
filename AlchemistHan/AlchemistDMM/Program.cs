@@ -39,7 +39,7 @@ namespace AlchemistDMM
             });
 
             Console.WriteLine("下载汉化数据");
-            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPWord.txt", "JPResult.xlsx");
+            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", "JPResult.xlsx");
 
             if (Directory.Exists("Han"))
             {
