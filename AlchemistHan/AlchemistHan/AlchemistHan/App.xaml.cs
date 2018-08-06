@@ -16,12 +16,12 @@ namespace AlchemistHan
 
         public App(IPlatformInitializer initializer) : base(initializer)
         {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
         }
 
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
             await NavigationService.NavigateAsync("Navigation/MainPage");
         }

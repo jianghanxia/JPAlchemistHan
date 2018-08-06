@@ -155,6 +155,7 @@ namespace AlchemistHan.ViewModels
                     }
 
                     List<CBItem> cb = new List<CBItem>();
+                    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                     using (var stream = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"), FileMode.Open, FileAccess.Read))
                     {
                         using (var reader = ExcelReaderFactory.CreateReader(stream))
