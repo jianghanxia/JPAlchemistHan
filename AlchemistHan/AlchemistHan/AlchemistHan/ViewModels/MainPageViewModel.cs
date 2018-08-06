@@ -43,6 +43,7 @@ namespace AlchemistHan.ViewModels
             {
                 try
                 {
+                    Message = "";
                     IsBusy = false;
                     await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
@@ -59,6 +60,7 @@ namespace AlchemistHan.ViewModels
             {
                 try
                 {
+                    Message = "";
                     IsBusy = false;
                     await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/SY", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
@@ -74,6 +76,7 @@ namespace AlchemistHan.ViewModels
             {
                 try
                 {
+                    Message = "";
                     IsBusy = false;
                     await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/WR", Path.Combine(DependencyService.Get<ISystem>().GetLocalFilePath(), "0c9a8047"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成字体下载", "OK");
@@ -92,6 +95,7 @@ namespace AlchemistHan.ViewModels
 
         private void OnRestoreHanCommandExecuted()
         {
+            Message = "";
             IsBusy = false;
             IsDownload = true;
             DownloadProgress = 0;
@@ -135,6 +139,7 @@ namespace AlchemistHan.ViewModels
 
         private void OnHHCommandExecuted()
         {
+            Message = "";
             IsBusy = false;
             IsDownload = true;
             DownloadProgress = 0;
