@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Prism.Services;
 using ExcelDataReader;
+using Newtonsoft.Json;
 using DependencyService = Xamarin.Forms.DependencyService;
 
 namespace AlchemistHan.ViewModels
@@ -32,7 +33,9 @@ namespace AlchemistHan.ViewModels
         public DelegateCommand DownloadSYFontCommand { get; }
         public DelegateCommand DownloadWRFontCommand { get; }
         public DelegateCommand HHCommand { get; }
+        public DelegateCommand JsonCommand { get; }
         public DelegateCommand RestoreHanCommand { get; }
+        public DelegateCommand RestoreJsonCommand { get; }
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
         {
@@ -46,6 +49,7 @@ namespace AlchemistHan.ViewModels
                     Message = "";
                     IsBusy = false;
                     await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"));
+                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.gz"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
                     IsBusy = true;
                 }
@@ -90,7 +94,9 @@ namespace AlchemistHan.ViewModels
             });
 
             HHCommand = new DelegateCommand(OnHHCommandExecuted);
+            JsonCommand = new DelegateCommand(OnJsonCommandExecuted);
             RestoreHanCommand = new DelegateCommand(OnRestoreHanCommandExecuted);
+            RestoreJsonCommand = new DelegateCommand(OnRestoreJsonCommandExecuted);
         }
 
         private void OnRestoreHanCommandExecuted()
@@ -126,7 +132,128 @@ namespace AlchemistHan.ViewModels
 
                     IsDownload = false;
                     IsBusy = true;
-                    Message = "还原Loc完成";
+                    Message = "还原文本完成";
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsDownload = false;
+                    IsBusy = true;
+                }
+            });
+        }
+
+        private void OnRestoreJsonCommandExecuted()
+        {
+            Message = "";
+            IsBusy = false;
+
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var verj = JToken.Parse(ver);
+
+            Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    var path = DependencyService.Get<ISystem>().GetLocalFilePath();
+
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f",
+                        Path.Combine(path, "b9cc206f"));
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6",
+                        Path.Combine(path, "49744fd6"));
+
+                    IsBusy = true;
+                    Message = "还原数据完成";
+                }
+                catch (Exception ee)
+                {
+                    Message = ee.Message;
+                    IsBusy = true;
+                }
+            });
+        }
+
+        private void OnJsonCommandExecuted()
+        {
+            Message = "";
+            IsBusy = false;
+            IsDownload = true;
+            DownloadProgress = 0;
+
+            if (!File.Exists(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.gz")))
+            {
+                Message = "先下载数据";
+                return;
+            }
+
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    List<CBItem> cb = new List<CBItem>();
+                    using (var sReader =
+                        new StreamReader(
+                            new GZipStream(File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.gz"), FileMode.Open), CompressionMode.Decompress),
+                            Encoding.UTF8))
+                    {
+                        while (!sReader.EndOfStream)
+                        {
+                            var res = sReader.ReadLine();
+                            var a = res.Split('\t');
+                            cb.Add(new CBItem {IDstr = a[0], ID = a[1], Chinese = a[2]});
+                        }
+                    }
+
+                    var fl = cb.Select(i => i.IDstr).Distinct();
+
+                    var path = DependencyService.Get<ISystem>().GetLocalFilePath();
+                    foreach (var file in fl)
+                    {
+                        if (File.Exists(Path.Combine(path, file)))
+                        {
+                            var fcb = cb.Where(i => i.IDstr == file);
+                            var nc = fcb.Count();
+                            int ii = 0;
+
+                            using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
+                            {
+                                var json = JToken.Parse(sReader.ReadToEnd());
+
+                                foreach (var cbi in fcb)
+                                {
+                                    var s = json.SelectToken(cbi.ID);
+                                    s.Replace(cbi.Chinese);
+
+                                    DownloadProgress = ii / (float)nc;
+                                    ii += 1;
+                                }
+
+                                var sd = json.ToString(Formatting.None);
+
+                                byte[] byteArray = Encoding.UTF8.GetBytes(sd);
+                                MemoryStream stream = new MemoryStream(byteArray);
+                                using (var f = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), FileMode.Create))
+                                {
+                                    using (var result = new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression))
+                                    {
+                                        byte[] buffer = new byte[4096];
+                                        int n;
+                                        while ((n = stream.Read(buffer, 0, buffer.Length)) != 0)
+                                        {
+                                            result.Write(buffer, 0, n);
+                                        }
+                                    }
+                                }
+                            }
+
+                            File.Copy(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), Path.Combine(path, file), true);
+                            File.Delete(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"));
+                        }
+                    }
+
+                    IsDownload = false;
+                    IsBusy = true;
+                    Message = "完成数据汉化";
                 }
                 catch (Exception ee)
                 {
@@ -225,7 +352,7 @@ namespace AlchemistHan.ViewModels
 
                     IsDownload = false;
                     IsBusy = true;
-                    Message = "完成汉化";
+                    Message = "完成文本汉化";
                 }
                 catch (Exception ee)
                 {
