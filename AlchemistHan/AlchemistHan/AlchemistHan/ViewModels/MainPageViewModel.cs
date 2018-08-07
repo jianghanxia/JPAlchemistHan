@@ -106,7 +106,8 @@ namespace AlchemistHan.ViewModels
             IsDownload = true;
             DownloadProgress = 0;
 
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}");
             var verj = JToken.Parse(ver);
 
             Task.Factory.StartNew(async () =>
@@ -148,7 +149,8 @@ namespace AlchemistHan.ViewModels
             Message = "";
             IsBusy = false;
 
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}");
             var verj = JToken.Parse(ver);
 
             Task.Factory.StartNew(async () =>

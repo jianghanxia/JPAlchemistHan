@@ -16,7 +16,8 @@ namespace AlchemistDMM
     {
         static void Main(string[] args)
         {
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", "ver=9c21ac89");
+            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}");
             var verj = JToken.Parse(ver);
 
             Console.WriteLine("下载ASSETLIST");
@@ -90,7 +91,7 @@ namespace AlchemistDMM
                                     {
                                         var res = sReader.ReadLine();
 
-                                        var a = res.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                                        var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                         if (a.Length > 1 && res != "\r")
                                         {
                                             var h = fcb.Where(i => i.ID == a[0]);

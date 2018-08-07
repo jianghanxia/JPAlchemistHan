@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="AlchemistHan.Views.MainPage" Title="为谁炼金汉化工具 1.10">
+             x:Class="AlchemistHan.Views.MainPage" Title="为谁炼金汉化工具 1.11">
     <StackLayout>
         <Label Text="汉化群：530060143  炼金鎮守府" />
         <Label Text="建议在游戏当中全部下载数据后再执行汉化。如果数据更新等情况导致汉化失效，请重新下载汉化数据后，重新执行两个汉化即可。" />
