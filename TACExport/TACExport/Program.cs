@@ -29,9 +29,26 @@ namespace TACTest
             var mpjp = MasterParam("49744fd6", "DataJP/49744fd6");
 
             Console.WriteLine("抓取WIKI数据");
-            var unit = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Unit/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+            List<WikiData> unit;
+            if (File.Exists("WikiUnit.txt"))
+            {
+                unit = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiUnit.txt"))._embedded;
+            }
+            else
+            {
+                unit = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Unit/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+            }
             unit.ForEach(i => i.Path = $"Unit[?(@.iname=='{i.iname}')].name");
-            var jobs = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Job/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+
+            List<WikiData> jobs;
+            if (File.Exists("WikiJobs.txt"))
+            {
+                jobs = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiJobs.txt"))._embedded;
+            }
+            else
+            {
+                jobs = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Job/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+            }
             jobs.ForEach(i => i.Path = $"Job[?(@.iname=='{i.iname}')].name");
 
             var wikidata = new List<WikiData>(unit);
@@ -207,7 +224,7 @@ namespace TACTest
 
                 foreach (var a in js["TobiraCategories"].Children())
                 {
-                    CB.Add(new CBItem { IDstr = id, ID = $"TobiraCategories[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                    CB.Add(new CBItem { IDstr = id, ID = $"TobiraCategories[?(@.category=='{a["category"]}')].name", Chinese = $"{a["name"]}" });
                 }
 
                 foreach (var a in js["Trick"].Children())
@@ -263,7 +280,10 @@ namespace TACTest
                     var h = cnlist.Where(i => i.ID == item.ID);
                     if (h.Any())
                     {
-                        result.WriteLine($"{item.IDstr}\t{item.ID}\t{h.First().Chinese}");
+                        if (!string.IsNullOrWhiteSpace(h.First().Chinese))
+                        {
+                            result.WriteLine($"{item.IDstr}\t{item.ID}\t{h.First().Chinese}");
+                        }
                     }
                 }
             }
