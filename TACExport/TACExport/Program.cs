@@ -16,10 +16,10 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            //InitJP();
-            //InitCN();
+            InitJP();
+            InitCN();
 
-            //WordList();
+            WordList();
 
             Console.WriteLine("解析JSON数据");
             var qpcn = QuestParam("35e7c476", "DataCN/35e7c476");
@@ -384,29 +384,45 @@ namespace TACTest
             }
         }
 
-        public static string GetWeb(string url, string method = "Get", string postData = "")
+        public static string GetWeb(string url, string method = "Get", string postData = "", int errnum = 0)
         {
-            var request = WebRequest.CreateHttp(url);
-            request.Method = method.ToUpper();
-
-            if (method == "Post" && postData != "")
+            try
             {
-                request.ContentType = "application/x-www-form-urlencoded";
-                var bytes = Encoding.UTF8.GetBytes(postData);
-                var stream = request.GetRequestStream();
-                stream.Write(bytes, 0, bytes.Length);
-                stream.Close();
-            }
+                var request = WebRequest.CreateHttp(url);
+                request.Method = method.ToUpper();
+                request.Accept = "identity";
+                request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
 
-            var response = request.GetResponse();
-
-            using (var stream = response.GetResponseStream())
-            {
-                using (var sReader = new StreamReader(stream, Encoding.GetEncoding("UTF-8")))
+                if (method == "Post" && postData != "")
                 {
-                    var res = sReader.ReadToEnd();
-                    return res;
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    var bytes = Encoding.UTF8.GetBytes(postData);
+                    var stream = request.GetRequestStream();
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Close();
                 }
+
+                var response = request.GetResponse();
+
+                using (var stream = response.GetResponseStream())
+                {
+                    using (var sReader = new StreamReader(stream, Encoding.GetEncoding("UTF-8")))
+                    {
+                        var res = sReader.ReadToEnd();
+                        return res;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (errnum < 5)
+                {
+                    Thread.Sleep(2000);
+                    errnum += 1;
+                    return GetWeb(url, method, postData, errnum);
+                }
+
+                throw e;
             }
         }
 
