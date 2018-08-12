@@ -326,7 +326,7 @@ namespace TACTest
         {
             using (var wf = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write), Encoding.UTF8))
             {
-                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")))
+                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i=>i.IDStr))
                 {
                     using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
                     {
