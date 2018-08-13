@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ExcelDataReader;
 using Ionic.Zlib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,6 +17,8 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
+            //Diff();
+
             InitJP();
             InitCN();
 
@@ -63,6 +66,39 @@ namespace TACTest
 
             Console.WriteLine("完成");
             Console.ReadLine();
+        }
+
+        public static void Diff()
+        {
+            List<CBItem> CB = new List<CBItem>();
+            using (var reader = ExcelReaderFactory.CreateReader(File.Open("KeyMinori.xlsx", FileMode.Open, FileAccess.Read)))
+            {
+                do
+                {
+                    while (reader.Read())
+                    {
+                        CB.Add(new CBItem {IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4)});
+                    }
+                } while (reader.NextResult());
+            }
+
+            using (var result = new StreamWriter(new FileStream(@"ResultDiff.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(File.Open("Old.xlsx", FileMode.Open, FileAccess.Read)))
+                {
+                    do
+                    {
+                        while (reader.Read())
+                        {
+                            var km = CB.First(i => i.IDstr == reader.GetString(0) && i.ID == reader.GetString(2));
+                            if (km.Chinese != reader.GetString(4))
+                            {
+                                result.WriteLine($"{reader.GetString(0)}\t{reader.GetString(2)}\t{km.Chinese}");
+                            }
+                        }
+                    } while (reader.NextResult());
+                }
+            }
         }
 
         public static void InitJP()
