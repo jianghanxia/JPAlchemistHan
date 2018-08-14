@@ -224,7 +224,7 @@ namespace AlchemistHan.ViewModels
                                 foreach (var cbi in fcb)
                                 {
                                     var s = json.SelectToken(cbi.ID);
-                                    s.Replace(cbi.Chinese);
+                                    s?.Replace(cbi.Chinese);
 
                                     DownloadProgress = ii / (float)nc;
                                     ii += 1;
