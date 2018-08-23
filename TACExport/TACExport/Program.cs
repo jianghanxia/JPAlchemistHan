@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -444,6 +446,9 @@ namespace TACTest
         {
             try
             {
+                //HTTPSQ请求  
+                ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+
                 var request = WebRequest.CreateHttp(url);
                 request.Method = method.ToUpper();
                 request.Accept = "identity";
@@ -484,6 +489,9 @@ namespace TACTest
 
         public static void GetDataAsync(string url, string filename)
         {
+            //HTTPSQ请求  
+            ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+
             var request = WebRequest.CreateHttp(url);
 
             request.Method = "GET";
@@ -506,6 +514,9 @@ namespace TACTest
 
         public static void GetFileAsync(string url, string filename)
         {
+            //HTTPSQ请求  
+            ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+
             var request = WebRequest.CreateHttp(url);
 
             request.Method = "GET";
@@ -526,6 +537,11 @@ namespace TACTest
             }
 
             response.Close();
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true; //总是接受     
         }
     }
 

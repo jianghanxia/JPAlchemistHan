@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Text;
 using System.Threading.Tasks;
 using ExcelDataReader;
@@ -16,25 +18,24 @@ namespace AlchemistDMM
     {
         static void Main(string[] args)
         {
+            ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
             var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}");
             var verj = JToken.Parse(ver);
 
             Console.WriteLine("下载ASSETLIST");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST", "ASSETLIST");
+            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST", "ASSETLIST_new");
 
-            var collection = GetCollection("ASSETLIST");
+            var oldcol = GetCollection("ASSETLIST");
+            var collection = GetCollection("ASSETLIST_new");
 
-            if (Directory.Exists("Data"))
-            {
-                Directory.Delete("Data", true);
-            }
             Directory.CreateDirectory("Data");
 
             var cloc = collection.Where(i => i.Path.StartsWith("Loc/"));
             Parallel.ForEach(cloc, (item) =>
             {
-                if (!File.Exists("Data/" + item.IDStr))
+                if (!File.Exists("Data/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
                 {
                     GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/{item.IDStr}", "Data/" + item.IDStr);
                     Console.WriteLine($"下载{item.IDStr}");
@@ -183,7 +184,7 @@ namespace AlchemistDMM
             }
         }
 
-        public static List<Item> GetCollection(string file)
+        public static (List<Item> list, int ver) GetCollection(string file)
         {
             using (BinaryReader binaryReader = new BinaryReader(File.Open(file, FileMode.Open)))
             {
@@ -227,7 +228,7 @@ namespace AlchemistDMM
                     collection.Add(item);
                 }
 
-                return collection;
+                return (collection, mRevision);
             }
         }
 
@@ -277,6 +278,11 @@ namespace AlchemistDMM
                     return res;
                 }
             }
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true; //总是接受     
         }
     }
 
