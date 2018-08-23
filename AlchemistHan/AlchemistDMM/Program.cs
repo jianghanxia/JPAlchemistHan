@@ -26,13 +26,24 @@ namespace AlchemistDMM
 
             Console.WriteLine("下载ASSETLIST");
             GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST", "ASSETLIST_new");
-
-            var oldcol = GetCollection("ASSETLIST");
             var collection = GetCollection("ASSETLIST_new");
 
+            (List<Item> list, int ver) oldcol;
+            if (File.Exists("ASSETLIST"))
+            {
+                oldcol = GetCollection("ASSETLIST");
+            }
+            else
+            {
+                if (Directory.Exists("Data"))
+                {
+                    Directory.Delete("Data", true);
+                }
+                oldcol = (new List<Item>(), 0);
+            }
             Directory.CreateDirectory("Data");
 
-            var cloc = collection.Where(i => i.Path.StartsWith("Loc/"));
+            var cloc = collection.list.Where(i => i.Path.StartsWith("Loc/"));
             Parallel.ForEach(cloc, (item) =>
             {
                 if (!File.Exists("Data/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
@@ -61,7 +72,8 @@ namespace AlchemistDMM
             //JSON汉化
             JsonHan();
 
-            File.Delete("ASSETLIST");
+            File.Copy("ASSETLIST_new", "ASSETLIST", true);
+            File.Delete("ASSETLIST_new");
             File.Delete("JPResult.xlsx");
             File.Delete("JSONWord.gz");
 
@@ -130,7 +142,6 @@ namespace AlchemistDMM
                 }
             }
         }
-
 
         public static void JsonHan()
         {
