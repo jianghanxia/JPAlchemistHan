@@ -25,46 +25,7 @@ namespace TACTest
             InitCN();
 
             WordList();
-
-            Console.WriteLine("解析JSON数据");
-            var qpcn = QuestParam("35e7c476", "DataCN/35e7c476");
-            var qpjp = QuestParam("b9cc206f", "DataJP/b9cc206f");
-
-            var mpcn = MasterParam("64a5ea86", "DataCN/64a5ea86");
-            var mpjp = MasterParam("49744fd6", "DataJP/49744fd6");
-
-            Console.WriteLine("抓取WIKI数据");
-            List<WikiData> unit;
-            if (File.Exists("WikiUnit.txt"))
-            {
-                unit = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiUnit.txt"))._embedded;
-            }
-            else
-            {
-                unit = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Unit/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
-            }
-            unit.ForEach(i => i.Path = $"Unit[?(@.iname=='{i.iname}')].name");
-
-            List<WikiData> jobs;
-            if (File.Exists("WikiJobs.txt"))
-            {
-                jobs = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiJobs.txt"))._embedded;
-            }
-            else
-            {
-                jobs = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Job/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
-            }
-            jobs.ForEach(i => i.Path = $"Job[?(@.iname=='{i.iname}')].name");
-
-            var wikidata = new List<WikiData>(unit);
-            wikidata.AddRange(jobs);
-
-            Console.WriteLine("合并JSON数据");
-            using (var result = new StreamWriter(new FileStream("JSONWord.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-            {
-                WriteJsonResult(qpjp, qpcn, wikidata, result);
-                WriteJsonResult(mpjp, mpcn, wikidata, result);
-            }
+            JsonList();
 
             Console.WriteLine("完成");
             Console.ReadLine();
@@ -129,7 +90,7 @@ namespace TACTest
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40038";
+            var code = "40048";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
@@ -149,6 +110,17 @@ namespace TACTest
         public static void WordList()
         {
             Console.WriteLine("生成Loc词表");
+
+            var diff = new List<CBItem>();
+            using (var sReader = new StreamReader(new FileStream(@"ResultDiff.txt", FileMode.Open), Encoding.UTF8))
+            {
+                while (!sReader.EndOfStream)
+                {
+                    var res = sReader.ReadLine();
+                    var a = res.Split('\t');
+                    diff.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
+                }
+            }
 
             List<CBItem> GFCB = new List<CBItem>();
             using (var sReader = new StreamReader(new FileStream(@"CBCN.txt", FileMode.Open), Encoding.UTF8))
@@ -171,9 +143,55 @@ namespace TACTest
                         var a = res.Split('\t');
 
                         var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
-                        result.WriteLine($"{res}\t{(h.Any() ? h.First().Chinese : "")}");
+                        var dh = diff.Where(i => i.IDstr == a[0] && i.ID == a[2]);
+                        result.WriteLine($"{res}\t{(dh.Any() ? dh.First().Chinese : h.Any() ? h.First().Chinese : "")}");
                     }
                 }
+            }
+        }
+
+        private static void JsonList()
+        {
+            Console.WriteLine("解析JSON数据");
+            var qpcn = QuestParam("35e7c476", "DataCN/35e7c476");
+            var qpjp = QuestParam("b9cc206f", "DataJP/b9cc206f");
+
+            var mpcn = MasterParam("64a5ea86", "DataCN/64a5ea86");
+            var mpjp = MasterParam("49744fd6", "DataJP/49744fd6");
+
+            Console.WriteLine("抓取WIKI数据");
+            List<WikiData> unit;
+            if (File.Exists("WikiUnit.txt"))
+            {
+                unit = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiUnit.txt"))._embedded;
+            }
+            else
+            {
+                unit = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Unit/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+            }
+
+            unit.ForEach(i => i.Path = $"Unit[?(@.iname=='{i.iname}')].name");
+
+            List<WikiData> jobs;
+            if (File.Exists("WikiJobs.txt"))
+            {
+                jobs = JsonConvert.DeserializeObject<WikiJson>(File.ReadAllText("WikiJobs.txt"))._embedded;
+            }
+            else
+            {
+                jobs = GetWikiData(@"https://tagatame.huijiwiki.com/api/rest_v1/namespace/data?filter={""_id"":{""$regex"":""Data:Job/""}}&keys={""iname"":1,""name_chs"":1}&count=true");
+            }
+
+            jobs.ForEach(i => i.Path = $"Job[?(@.iname=='{i.iname}')].name");
+
+            var wikidata = new List<WikiData>(unit);
+            wikidata.AddRange(jobs);
+
+            Console.WriteLine("合并JSON数据");
+            using (var result = new StreamWriter(new FileStream("JSONWord.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            {
+                WriteJsonResult(qpjp, qpcn, wikidata, result);
+                WriteJsonResult(mpjp, mpcn, wikidata, result);
             }
         }
 
