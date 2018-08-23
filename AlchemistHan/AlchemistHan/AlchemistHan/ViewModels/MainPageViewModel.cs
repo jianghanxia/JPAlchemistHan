@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using AlchemistHan.Models;
@@ -39,6 +41,8 @@ namespace AlchemistHan.ViewModels
 
         public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService)
         {
+            ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+
             NavigationService = navigationService;
             PageDialogService = pageDialogService;
 
@@ -458,6 +462,11 @@ namespace AlchemistHan.ViewModels
                     return res;
                 }
             }
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            return true; //总是接受     
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
