@@ -1,0 +1,103 @@
+﻿001	枫琉…<br>实验体中的…完成体	VO_fengliu.fengliu_chara_1024
+002	这家伙是完成体…？<br>就是说…你也是敌人吗？	VO_monzein.monzein_sys_0029
+003	…不…等等	VO_basini.basini_chara_1011
+004	…呜呜…
+005	啊…!?<br>那些不死身的士兵…咽气了…!?	VO_victor.victor_chara_1004
+006	他是格里特达伊克的人<br>不明白为何他会攻击自己人<br>…你到底是什么意思…？
+007	你问我为何这样…？<br>…是为了救赎啊	VO_fengliu.fengliu_sys_0005
+008	救赎…？	VO_chloe.chloe_sys_0025
+009	…他们的自我<br>在长期实验中失去了	VO_fengliu.fengliu_sys_0004
+010	违反自己的意志<br>仅仅作为武器被利用…<br>没有比这个…更悲惨的了
+011	…赐予不死身的人以死亡<br>…这就是救赎吗…？	VO_chloe.chloe_battle_0019
+012	…！<br>克罗伊，别大意!!	VO_vetel.vetel_battle_0019
+013	…！	VO_chloe.chloe_battle_0022
+014	…算了…	VO_fengliu.fengliu_sys_0042
+015	…！<br>额头…被击中后…！	VO_vetel.vetel_sys_0027
+016	…算了吧	VO_fengliu.fengliu_sys_0018
+017	这种事没意义的…<br>没有意志…却继续战斗…<br>只不过是衍生悲剧而已…
+018	…你…
+019	…我是把埋在他们额头里的<br>贤者之石给击碎了	VO_fengliu.fengliu_sys_1050
+020	他们不是不死身…<br>只是使用了贤者之石，被操控而已	VO_fengliu.fengliu_sys_0030
+021	贤者之石…！<br>对了…他们是被炼金能量<br>操控的而已…！	VO_monzein.monzein_sys_0027
+022	维克塔，联络各队<br>只要把额头里的贤者之石都破坏的话<br>就能阻止他们了…快！
+023	…！<br>是!!	VO_victor.victor_sys_0037
+024	…谢谢你的情报<br>多亏你的相助<br>战局应该会有很大改变	VO_vetel.vetel_sys_0033
+025	就像刚才说的…<br>我的目的只是救赎他们<br>…不需要道谢	VO_fengliu.fengliu_sys_0039
+026	…！　啊…那个火柱是…!?	VO_monzein.monzein_sys_0027
+027	!?<br>那是…!?	VO_victor.victor_sys_0025
+028	…难道…！	VO_chloe.chloe_sys_0020
+029	王城啊！<br>可恶…奥莱伊恩的主力<br>还是没能阻止吗…!?	VO_vetel.vetel_battle_0019
+030	难道…圣石也…!?	VO_monzein.monzein_sys_0021
+031	…我们安比利亚的圣石<br>“雷布亚坦”所执掌的“嫉妒”…	VO_vetel.vetel_event_1015
+032	和王家的血脉相连<br>命运与共<br>这是大家都知道的
+033	…一旦从王家被带离<br>“雷布亚坦”就会产生嫉妒…<br>传说就是如此
+034	反过来说<br>国王陛下所在的地方<br>也就是圣石的所在…
+035	因为这个特点<br>就比其他六大国<br>更容易被知道圣石的位置…
+036	格里特达伊克第一个选择<br>安比利亚下手就是为了这个…！	VO_basini.basini_sys_0045
+037	如果国王陛下<br>落入了奥莱伊恩手中…！
+038	不…不管如何<br>“苍炎骑士团”<br>都会保护陛下的	VO_vetel.vetel_event_1015
+039	“苍炎骑士团”…？	VO_basini.basini_sys_0006
+040	就是和绯炎骑士团<br>合称双璧的王立骑士团	VO_vetel.vetel_sys_0004
+041	和我们这样在有事的时候<br>作为国内外的游击队<br>而行动的不同…
+042	他们是专职守护国王陛下的<br>近卫兵团
+043	我的盟友・迪尔加也在那里…？	VO_monzein.monzein_sys_0026
+044	恩，已经去支援苍炎骑士团了<br>保护国王陛下<br>也就是保护“雷布亚坦”…	VO_vetel.vetel_sys_0004
+045	所以这就是最优先事项<br>没事的…他舍弃性命<br>也会保护陛下的
+046	但是…你看，那个火柱!?<br>维特尔大人，我们也去王城吧…	VO_victor.victor_sys_0018
+047	不行！我们的任务<br>是保护安比利亚的市民！<br>不许离开这里！	VO_vetel.vetel_sys_0013
+048	但是…	VO_victor.victor_battle_0019
+049	苍炎骑士团<br>坚信着我们可以击退<br>格里特达伊克军的…！	VO_vetel.vetel_sys_0014
+050	你也不要怀疑<br>他们保护陛下的能力！
+051	…！<br>…是!!	VO_victor.victor_sys_0004
+052	别担心<br>那边的情况我去看	VO_monzein.monzein_chara_0010
+053	…！<br>蒙泽因团长!!	VO_victor.victor_sys_0025
+054	维特尔团长，可以吗…？
+055	可以<br>抱歉…让你费心了	VO_vetel.vetel_sys_0004
+056	别说客套话<br>…喂，密探<br>情况紧急，让你同行了	VO_monzein.monzein_sys_0007
+057	我说过了<br>我不受你的指示<br>即使反对我也要去王城	VO_basini.basini_sys_0012
+058	你个混蛋…！<br>事情结束后，我要教你<br>怎么做人…记着！	VO_monzein.monzein_sys_0027
+059	糟糕…<br>从车轮的痕迹来看，已经半天了啊…	VO_ortima.ortima_sys_0046
+060	他们比想象的<br>还要快啊<br>要快些了	VO_ortima.ortima_sys_0030
+061	…是…<br>…那个…亚乌拉斯团长<br>所说的是真的吗？	VO_kagura_3s_kagu.kagura_chara_1002
+062	啊…？
+063	跟狮子王奥莱伊恩宣战啥的…<br>如果是真的…<br>这可是相当大的责任啊…	VO_kagura_3s_kagu.kagura_sys_0030
+064	不不不!!<br>难道…他把宣战当真了<br>然后就举国出兵吗!?	VO_ortima.ortima_battle_1028
+065	当真了…<br>看来有这回事啊!?	VO_kagura_3s_kagu.kagura_sys_0025
+066	不…那个…<br>只是针对挑衅还嘴而已？	VO_ortima.ortima_chara_1011
+067	“而已？”!!<br>你不觉得这很过分吗!?	VO_kagura_3s_kagu.kagura_chara_1013
+068	从他这个时候<br>出动的情况来看<br>多少有些影响吧…
+069	…他们为何<br>在这个时候出动…<br>你是想问这个吧？	VO_ortima.ortima_sys_0031
+070	这样的话<br>我有些头绪了
+071	啊…？	VO_kagura_3s_kagu.kagura_sys_1047
+072	恐怕库达团长<br>被杀的事情就是起因
+073	奥莱伊恩<br>很执着于库达团长
+074	!?<br>什么意思…!?	VO_kagura_3s_kagu.kagura_sys_0025
+075	一定是…“世界力量的均衡”<br>他相信这种均衡正在逐步被打破	VO_ortima.ortima_sys_0022
+076	调整世界力量的<br>保护世界和平的<br>扎因大人被杀…瓮星也消失了
+077	而且…<br>成为台风之眼的库达团长<br>也被卡农打倒了…
+078	…阻止奥莱伊恩野心的人<br>已经没有了…？	VO_kagura_3s_kagu.kagura_sys_0022
+079	他应该是确定这一点了	VO_ortima.ortima_sys_0004
+080	格里特达伊克<br>绝不是突然行动的…<br>恐怕是策划好的
+081	……<br>…老实说…这种事<br>其实无所谓	VO_kagura_3s_kagu.kagura_sys_0030
+082	啊…？
+083	虽然卡农对我说<br>不能带有私怨，但这不可能…！	VO_kagura_3s_kagu.kagura_sys_0018
+084	我…因为瓮星<br>祖国…一切<br>都被夺走了…！
+085	…是啊…<br>但是…
+086	但是…什么!?<br>你觉得这没办法是吗！<br>你就是这样想的吧！	VO_kagura_3s_kagu.kagura_sys_1017
+087	不是的…<br>真的只是为了这个吗？	VO_ortima.ortima_chara_1011
+088	哎…？	VO_kagura_3s_kagu.kagura_sys_1047
+089	他们毁灭绵津见<br>被认为是领土扩张<br>以及为了权利…
+090	实际上<br>目标是为了瓮星…<br>这是大家的理解对吧？
+091	但是…仅仅因为没得到瓮星<br>就要消灭整个国家<br>至于吗…？
+092	…你说什么呢？<br>实际上那些家伙<br>不就是这么干的吗	VO_kagura_3s_kagu.kagura_chara_1013
+093	我只是说可能啊…<br>绵津见的毁灭<br>也许还有其他目的…
+094	啊…？	VO_kagura_3s_kagu.kagura_sys_0025
+095	不…算了<br>只不过是推测<br>抱歉我说废话了	VO_ortima.ortima_sys_0030
+096	…反正我<br>绝不原谅格里特达伊克！	VO_kagura_3s_kagu.kagura_sys_0030
+097	恩…你干劲足也是好事<br>然后…有点麻烦啊	VO_ortima.ortima_sys_0031
+098	你还在担心<br>会被抓吗…？<br>没事的，不会让你裸体的	VO_kagura_3s_kagu.kagura_sys_0007
+099	喂…这话就别提了啊!?<br>不是这个…快看	VO_ortima.ortima_battle_1028
+100	啊…？	VO_kagura_3s_kagu.kagura_sys_1047
+101	…！<br>狼烟四起啊！	VO_kagura_3s_kagu.kagura_battle_0019
+102	路斯特布鲁格的城下<br>…快，神乐	VO_ortima.ortima_sys_0042
+103	是！

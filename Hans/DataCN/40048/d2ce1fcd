@@ -1,0 +1,70 @@
+﻿001	…………
+002	雷修斯？<br>怎么了，最近一直发呆<br>是发生了什么吗？	VO_knightm.knightm_sys_0001
+003	没什么<br>不过，这种没什么问题也是一种问题啊…<br>…啊！想不出头绪	VO_retzius.retzius_sys_0012
+004	难得你这么认真啊…<br>在想什么事呢	VO_knightm.knightm_sys_0044
+005	…在想继续这么过下去可以吗<br>我这一生都要做盗贼了吗<br>虽然为了活下去也是没办法的事	VO_retzius.retzius_sys_0031
+006	但是还是想要活得更带劲…<br>或者说…想要一种热情燃烧的感觉！<br>…你明白我这种心情吗!?	VO_retzius.retzius_chara_1011
+007	恩，我也不是不明白…<br>你先振作起来啊，你这样子<br>会影响今天的工作的	VO_knightm.knightm_sys_0031
+008	我知道的！<br>我会好好做工作的<br>额…是这边吗？	VO_retzius.retzius_sys_0005
+009	恩，像是那边那个房子
+010	独占这一带绿洲特权<br>的缺德商人…<br>看来是赚了不少钱啊	VO_retzius.retzius_sys_0010
+011	你一个人真的没事吗？	VO_knightm.knightm_sys_0001
+012	恩<br>你们就帮我放哨，确保逃跑路线没问题<br>一旦我得手就逃走	VO_retzius.retzius_sys_0004
+013	好！
+014	太阳下山后才是关键啊<br>…要加把劲了！	VO_retzius.retzius_event_1012
+015	…嘁！
+016	为什么有这么多的警卫兵！<br>之前也没听说啊！	VO_retzius.retzius_sys_0017
+017	呼…<br>还以为混入了什么厉害的老鼠呢<br>原来是这种普通的家伙	VO_stknightm.stknightm_sys_0010
+018	你说什么…！<br>我才不是普通的家伙！<br>我有个响亮的名字，叫雷修斯…	VO_retzius.retzius_sys_0013
+019	居然自报家门啊	VO_stknightm.stknightm_sys_0023
+020	啊…不好！	VO_retzius.retzius_sys_0020
+021	真是不知天高地厚的垃圾<br>…给我灭了他！	VO_stknightm.stknightm_battle_0025
+022	…!?	VO_stknightm.stknightm_sys_0027
+023	…？
+024	什么…你是什么人！	VO_thiefm.thiefm_sys_0027
+025	…………
+026	可恶…！	VO_thiefm.thiefm_sys_0022
+027	这个房子里的所有财产，我全部没收了<br>理由的话，你自己应该最清楚了吧	VO_rusia.rusia_sys_0002
+028	…你是何人…	VO_stknightm.stknightm_battle_0022
+029	你没必要知道<br>我只是接受了这个委托而已	VO_rusia.rusia_sys_0010
+030	…啊…好厉害！	VO_retzius.retzius_sys_0020
+031	…………
+032	…请问！
+033	…什么	VO_rusia.rusia_sys_0005
+034	那个…你救了我…<br>额…谢谢你！	VO_retzius.retzius_sys_0020
+035	我可不记得有救过你<br>我只是在执行自己的任务	VO_rusia.rusia_sys_0016
+036	……！<br>即便如此，我也要谢谢你！<br>我叫雷修斯。你呢…？	VO_retzius.retzius_battle_0021
+037	你没必要知道	VO_rusia.rusia_chara_1002
+038	啊，额…	VO_retzius.retzius_sys_0027
+039	无法依情况做出选择的人<br>只有死路一条	VO_rusia.rusia_event_1006
+040	啊…！	VO_retzius.retzius_sys_0020
+041	……啊…！
+042	好帅啊…！	VO_retzius.retzius_sys_0009
+043	刚才真是吓坏了<br>在想是不是雷修斯被干掉了	VO_knightm.knightm_sys_0030
+044	哼。真是愚蠢的问题<br>这对于我来说是再简单不过的事了	VO_retzius.retzius_sys_0010
+045	…额…雷修斯？<br>我有句话一直很想说	VO_knightm.knightm_sys_0001
+046	什么	VO_retzius.retzius_sys_0006
+047	那个…不太适合你<br>装酷的话	VO_knightm.knightm_sys_0030
+048	…啊，果然还是？<br>想变成大哥那样还有很远的路要走啊！<br>真是很帅啊…	VO_retzius.retzius_sys_0031
+049	大哥吗…？
+050	就是那种…充满了男人信念的！<br>比如说『你没必要知道』之类的…！<br>这才是男人中的男人！	VO_retzius.retzius_sys_0005
+051	…好的，决定了！<br>我要拜那个人为师！<br>盗贼团自今日起解散！	VO_retzius.retzius_event_1012
+052	哎!?
+053	总算是找到了我的生存方式！<br>我一定要成为男人中的男人！<br>拭目以待吧，大哥！	VO_retzius.retzius_sys_0007
+054	…不过，连名字都不知道<br>要怎么找到他呢？	VO_knightm.knightm_sys_0001
+055	这才是关键啊…<br>恩…有没有什么好办法呢？	VO_retzius.retzius_sys_0029
+056	就算你这么说…<br>啊，说起来！	VO_knightm.knightm_sys_0016
+057	在路斯特布鲁格，好像有位<br>很灵的占卜师<br>不过，我只是听说，不知道是不是真的…
+058	这就够了！谢谢！<br>好的，等着我啊，大哥！	VO_retzius.retzius_chara_1017
+059	啊，我说…喂！<br>雷修斯！
+060	一直以来多谢啦！<br>要成为厉害的人啊!!	VO_retzius.retzius_sys_0008
+061	…像这样充满干劲的雷修斯<br>我还是第一次见到
+062	请加油噢！<br>雷修斯！	VO_knightm.knightm_sys_0007
+063	呼，总算是到了<br>话说占卜师的家…<br>这大半夜的想问也问不到啊…	VO_retzius.retzius_chara_1011
+064	(…深夜里，孤身一人的女子…？)	VO_retzius.retzius_sys_0025
+065	…………
+066	(想干什么呢…？上面有什么呢？<br>…算了，还是问问占卜师的事吧)	VO_retzius.retzius_sys_0006
+067	啊…请问！	VO_retzius.retzius_sys_1050
+068	喂，大半夜的一个人出来走路<br>可不知道会发生什么危险事呢
+069	…嘁，正好<br>让我问问路吧！	VO_retzius.retzius_sys_0016
+

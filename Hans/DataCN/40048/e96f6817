@@ -1,0 +1,195 @@
+﻿001	（…当我醒来时，只有自己一个人<br>从我出生时，就在这个房间里，<br>一个人…）	VO_zaharu.zaharu_sys_0018
+002	（连自己的父母是谁，<br>自己是谁，都不知道）
+003	（每天三次，会有人从外面把锁打开<br>有个叫做『这间宅邸的仆人精灵』的女人<br>会把食物给我送来）
+004	（她把我叫做『扎哈尔』<br>因此我就叫『扎哈尔』吧）
+005	（她们总是用<br>很鄙视的眼神看我）	VO_zaharu.zaharu_battle_0019
+006	（虽然现在我已经觉得没什么了，<br>但是在小时候就会觉得这是<br>『厌恶与嫌弃』）
+007	（但是…为何大家会生气<br>谁也没告诉我<br>也没人和我说话）
+008	 喂喂！　花开了啊～！<br>好厉害！　好美～！
+009	（偶尔能听到外面孩子们的声音）	VO_zaharu.zaharu_sys_0007
+010	（花园的门原本是禁止打开的<br>我稍微打开了一条缝，从那里<br>窥视外面）
+011	（我的周围总是黑暗<br>我也成为了黑暗的一部分）
+012	（但是外面的世界太美了<br>我感到很痛苦）
+013	（我阅读了<br>这个房间里很多的书籍<br>我只能从书本上去了解世界）
+014	（某一天…）
+015	初次见面	VO_laetitia.laetitia_sys_0007
+016	我是蕾迪亚<br>我从今天开始<br>负责照顾你
+017	…………
+018	（那个少女，<br>居然会冲我微笑）
+019	初次见面，扎哈尔君<br>我比你大所以是你的姐姐<br>嘻嘻	VO_laetitia.laetitia_sys_0001
+020	姐姐…？	VO_zaharu.zaharu_sys_0025
+021	对。是姐姐<br>你一直都是一个人，<br>会很寂寞吧？	VO_laetitia.laetitia_sys_0004
+022	从今天开始我就是你的家人了<br>以后就不会寂寞了哟	VO_laetitia.laetitia_sys_0007
+023	家人…<br>我其实也不会寂寞<br>因为我一直是一个人的	VO_zaharu.zaharu_sys_0007
+024	是吗…<br>那么，这里也没有<br>我能待的地方呢	VO_laetitia.laetitia_sys_0016
+025	…!?
+026	啊，抱歉<br>你不用在意的	VO_laetitia.laetitia_sys_0036
+027	至今为止，<br>都是一样没有归宿的呢	VO_laetitia.laetitia_sys_0030
+028	为什么没有呢…？	VO_zaharu.zaharu_sys_0006
+029	你不懂吗…？<br>我是黑暗精灵啊？	VO_laetitia.laetitia_sys_0027
+030	黑暗，精灵…？	VO_zaharu.zaharu_sys_0025
+031	也对…谁也不会告诉你吧…<br>你毕竟只是一个人…	VO_laetitia.laetitia_sys_0016
+032	姐姐你知道我是谁吗!?<br>你也知道我的父母吗!?<br>『混血精灵』到底是什么!?	VO_zaharu.zaharu_battle_0021
+033	…………<br>对你来说…<br>也许是非常残酷的话题哦？	VO_laetitia.laetitia_sys_0001
+034	…即使如此我还是要知道<br>我到底是谁<br>拜托了！　告诉我！	VO_zaharu.zaharu_battle_0019
+035	…好吧<br>我就告诉你…<br>你究竟是谁…	VO_laetitia.laetitia_sys_0038
+036	（蕾迪亚姐姐，<br>告诉我了…）
+037	（我是由人类…以及这间宅邸的<br>高等精灵的大小姐所生的…<br>也就是不被接受的孩子）
+038	（父亲被高等精灵们处死了，<br>母亲生下我后<br>就死去了…）
+039	（高等精灵是精灵中最为高傲的<br>像我这样的『混血精灵』，就是<br>一种耻辱…，而且…）
+040	…像我这样的黑暗精灵，<br>也是被高等精灵嫌弃的…	VO_laetitia.laetitia_sys_0030
+041	为何…？	VO_zaharu.zaharu_sys_0025
+042	我们黑暗精灵，<br>以前杀害了同为精灵的伙伴	VO_laetitia.laetitia_battle_0019
+043	夺取高等精灵的生命后<br>他们的炼金就会转为黑暗<br>降临到这些精灵身上
+044	也就是说黑暗精灵的血脉是背叛的血统…<br>所以纯种的高等精灵<br>就很忌讳厌恶黑暗精灵…	VO_laetitia.laetitia_sys_0029
+045	为何杀死伙伴呢…？	VO_zaharu.zaharu_sys_0007
+046	…不知道呢<br>这些都是我们出生之前<br>很久很久的事情了…	VO_laetitia.laetitia_sys_0030
+047	…姐姐为何在这里呢？	VO_zaharu.zaharu_sys_0049
+048	…我是被买来的	VO_laetitia.laetitia_sys_0018
+049	被买来…？	VO_zaharu.zaharu_sys_0025
+050	我是个奴隶<br>黑暗精灵向高等精灵挑战，<br>但是失败了…	VO_laetitia.laetitia_sys_0004
+051	而作为失败方的赔礼，<br>我就被卖给高等精灵了…
+052	我就是为了和你呆在一起，<br>才来到这里的
+053	…奴隶…	VO_zaharu.zaharu_sys_0018
+054	（『奴隶』是什么，<br>是什么样的存在，<br>我在书中得知了）
+055	（而且蕾迪亚姐姐，<br>和我一样，在世界中<br>只有这里才是归宿）
+056	蕾迪亚姐姐…<br>你能一直在这里陪我吗？	VO_zaharu.zaharu_sys_0049
+057	啊…<br>可以吗？<br>但是你…	VO_laetitia.laetitia_sys_0027
+058	我想多听姐姐说话<br>所以希望你留在这里	VO_zaharu.zaharu_sys_0007
+059	…谢谢<br>只要你希望，我就留下…	VO_laetitia.laetitia_sys_0033
+060	（之后，我们就<br>一起生活了很长时间）
+061	（姐姐除了准备饭食之外<br>都一直在房间陪我）
+062	（蕾迪亚姐姐，<br>懂得很多，<br>书中没有的知识）
+063	（所以我让姐姐<br>教了我很多东西）
+064	喂喂！我找到树木的果实啦！
+065	真的啊！　圆圆的好好看～！
+066	…………
+067	扎哈尔君，吃饭了<br>…？<br>在看什么呢？	VO_laetitia.laetitia_sys_0002
+068	外面…有孩子们<br>远处还能看见高塔	VO_zaharu.zaharu_sys_0007
+069	…扎哈尔君，想去外面吗？	VO_laetitia.laetitia_sys_0001
+070	不…<br>在这里和姐姐在一起就好了<br>因为…	VO_zaharu.zaharu_chara_1001
+071	因为？	VO_laetitia.laetitia_sys_0027
+072	外面的世界太炫目了，<br>总觉得…心情很不好	VO_zaharu.zaharu_sys_0049
+073	…………<br>『弑杀炫目之人吧<br>你就是黑暗之王』	VO_laetitia.laetitia_sys_0016
+074	那是？　什么…	VO_zaharu.zaharu_sys_0025
+075	黑暗精灵的古老传说<br>『黑暗之王，为谁而征伐<br>为谁而战斗』	VO_laetitia.laetitia_sys_0004
+076	“黑暗之王”…	VO_zaharu.zaharu_sys_0025
+077	从古至今，黑暗精灵就被高等精灵和<br>其他精灵所欺负…	VO_laetitia.laetitia_sys_0004
+078	总有一天，会有为我们报仇雪恨的<br>英雄出现…就是这样的传说	VO_laetitia.laetitia_sys_0007
+079	…如果	VO_zaharu.zaharu_sys_0018
+080	恩？	VO_laetitia.laetitia_sys_0006
+081	如果姐姐被欺负的话<br>我就成为“黑暗之王”<br>为姐姐而战	VO_zaharu.zaharu_sys_0007
+082	…扎哈尔君<br>谢谢<br>那我们就约好咯？	VO_laetitia.laetitia_sys_0033
+083	恩，约好了	VO_zaharu.zaharu_sys_0004
+084	恩…是了<br>为了这个，就必须教扎哈尔君<br>“炼金术”呢	VO_laetitia.laetitia_sys_0007
+085	？
+086	但是“炼金术”是“禁忌”…<br>圣教骑士团以外的人<br>是不允许使用的	VO_laetitia.laetitia_sys_0030
+087	但是如果真的想成为“黑暗之王”<br>“炼金术”就是必须的<br>扎哈尔君一定可以的
+088	好啊。为了保护姐姐<br>我什么都会做的	VO_zaharu.zaharu_sys_0007
+089	嘻嘻，谢谢<br>作为约定的信物，给你这个	VO_laetitia.laetitia_sys_0007
+090	这是…？<br>木雕的首饰…	VO_zaharu.zaharu_sys_0006
+091	这是我做的<br>要珍视哦？	VO_laetitia.laetitia_sys_0004
+092	…恩<br>谢谢
+093	（某一日…）
+094	（姐姐好慢啊…<br>还不能吃饭吗…肚子饿了…）	VO_zaharu.zaharu_sys_0031
+095	!?
+096	请住手，主人…	VO_laetitia.laetitia_battle_0022
+097	（姐姐…？）	VO_zaharu.zaharu_sys_0025
+098	喂！<br>卑劣的黑暗精灵臭丫头！<br>居然敢弄脏我的衣服！！	VO_mob-saga_omale.mog-saga_omale_sys_0012
+099	是因为您<br>撞了我啊…	VO_laetitia.laetitia_sys_0029
+100	哼，身为黑暗精灵居然还敢顶嘴…	VO_mob-saga_omale.mog-saga_omale_sys_0031
+101	你…	VO_laetitia.laetitia_battle_0022
+102	虽然有些肮脏，给我炼金的话<br>就饶过你吧…	VO_mob-saga_omale.mog-saga_omale_sys_0010
+103	（怎么了…<br>啊…从钥匙孔上可以看到…）	VO_zaharu.zaharu_sys_0049
+104	我是说把你的炼金<br>给我！<br>别磨蹭了，快跪下…!!	VO_mob-saga_omale.mog-saga_omale_sys_0012
+105	啊…!!	VO_laetitia.laetitia_battle_0019
+106	（啊…！　姐姐!!）	VO_zaharu.zaharu_battle_0021
+107	…………
+108	你没听到吗？<br>你的耳朵是装饰吗？	VO_mob-saga_omale.mog-saga_omale_sys_0012
+109	真是讨厌…和我们高贵的精灵相比，<br>也就是形态相似罢了…	VO_mob-saga_omale.mog-saga_omale_sys_0016
+110	…我知道了	VO_laetitia.laetitia_sys_0029
+111	那就好<br>快点吧	VO_mob-saga_omale.mog-saga_omale_sys_0010
+112	（姐姐…!!）	VO_zaharu.zaharu_sys_0028
+113	…住手…！<br>住手!!	VO_zaharu.zaharu_battle_0024
+114	什么!?	VO_mob-saga_omale.mog-saga_omale_sys_0026
+115	…扎哈尔…君…	VO_laetitia.laetitia_sys_0027
+116	…不许欺负…<br>蕾迪亚姐姐…	VO_zaharu.zaharu_sys_0027
+117	可恶!?<br>污秽的混血精灵!!<br>居然敢打破禁忌…!!	VO_mob-saga_omale.mog-saga_omale_sys_0042
+118	我要告诉我的叔父！<br>原本是我的妻子，却被你父亲逼入死路<br>我也要像杀你父亲那样把你给宰了!!
+119	!!
+120	啊!?<br>好，痛苦…救命…!!	VO_mob-saga_omale.mog-saga_omale_sys_0043
+121	扎哈尔君…
+122	啊…唔…!!<br>哇啊啊啊啊…!!	VO_zaharu.zaharu_sys_0043
+123	扎哈尔君!!
+124	（…之后的事情，<br>就记不清了…）
+125	（有个没见过的老精灵<br>命令我们「滚出去」<br>于是我们就被赶出去了）
+126	（囚禁我的牢笼…<br>我和姐姐两人的天国…<br>我都同时失去了）
+127	（然后，有生以来第一次<br>见到了“世界”）
+128	…………
+129	如何？　第一次看到外面的世界？	VO_laetitia.laetitia_sys_0001
+130	恩…世界<br>居然如此广阔…	VO_zaharu.zaharu_sys_0007
+131	非常大的哦，有很多人，<br>有街道…<br>有山，森林，河流，大海…还有巨大的塔	VO_laetitia.laetitia_sys_0004
+132	塔…？<br>指的是从家中<br>也能看到的巴贝尔塔？	VO_zaharu.zaharu_sys_0025
+133	是啊<br>想去吗？	VO_laetitia.laetitia_sys_0004
+134	恩…<br>我想去巴贝尔塔看看…	VO_zaharu.zaharu_sys_0007
+135	是吗…但是有点远啊，<br>我们能到得了吗…？	VO_laetitia.laetitia_sys_0016
+136	去吧！<br>我和姐姐一定行的！	VO_zaharu.zaharu_sys_0023
+137	是啊。扎哈尔君很强啊<br>真是吓我一跳<br>你居然有那种力量	VO_laetitia.laetitia_sys_0004
+138	我也吓了一跳…<br>因为姐姐被欺负了所以我就失去理智了…	VO_zaharu.zaharu_sys_0027
+139	对了…！<br>我杀了那个高等精灵后，<br>好像就有点奇怪了…
+140	…因为，你变成了<br>黑暗精灵啊	VO_laetitia.laetitia_sys_0018
+141	精灵杀死精灵后，<br>通过血…夺取了炼金后，<br>就会成为黑暗精灵…
+142	我变成…黑暗精灵了…？<br>这样啊！　我好高兴！	VO_zaharu.zaharu_sys_0008
+143	啊？　为何…？<br>黑暗精灵可是被嫌弃的啊？	VO_laetitia.laetitia_sys_0027
+144	这种事无所谓啊<br>我能和蕾迪亚姐姐变成一样的，<br>就很开心啊！	VO_zaharu.zaharu_sys_0007
+145	扎哈尔君…<br>你真的保护了我呢<br>谢谢	VO_laetitia.laetitia_sys_0034
+146	当然了啊！这是约定嘛<br>我要成为守护姐姐的<br>“黑暗之王”	VO_zaharu.zaharu_sys_0023
+147	…恩。你是我的…<br>不。也许你真的，<br>能成为	VO_laetitia.laetitia_sys_0004
+148	“黑暗之王”呢
+149	（之后我们就一起旅行了。<br>世界上…所有能去的地方，<br>都去了）
+150	（世界真的很大<br>既危险，又残酷…<br>却又很温柔很美丽）
+151	（我虽然讨厌从封闭的小屋里看到的<br>小小世界的美丽<br>但是却喜欢这个雄大世界的美）
+152	（我们时而和魔物，或者和人战斗，<br>也会遭遇到危险<br>慢慢的就成长为大人…）
+153	（经历了数百，数千日的岁月…）
+154	喂，你听说了吗？<br>拉斯特里斯以西的森林，<br>已经完全枯竭了	VO_thiefm.thiefm_sys_0002
+155	恩，听说了<br>好像完全变成沙漠了	VO_thiefm.thiefm_sys_0004
+156	传闻中<br>那里不是住着精灵吗	VO_thiefm.thiefm_sys_0030
+157	真的吗？<br>那种高傲的家伙，除了宗主国以外<br>也存在…	VO_thiefm.thiefm_sys_0006
+158	恩。但是，沙漠化之后<br>应该都灭绝了吧	VO_thiefm.thiefm_sys_0004
+159	但是，<br>世界会变成怎样呢<br>绿色街道都成了沙漠…	VO_thiefm.thiefm_sys_0031
+160	大陆中都是这样那样的纷争…<br>魔物也越加凶暴…<br>哎，真是令人烦恼的世界啊…	VO_thiefm.thiefm_sys_0030
+161	…………
+162	在想什么呢？	VO_laetitia.laetitia_sys_0001
+163	…没<br>差不多该出去了吧	VO_zaharu.zaharu_chara_1001
+164	…话说回来，我们都旅行了这么长时间，<br>还是没看到<br>巴贝尔塔啊…	VO_zaharu.zaharu_sys_0031
+165	是啊…那边圣教骑士的<br>巡视也很森严，在他们面前<br>又不能使用炼金术…很麻烦呢	VO_laetitia.laetitia_sys_0004
+166	但也没关系啊<br>我们的寿命很长…<br>总有天会到的	VO_laetitia.laetitia_sys_0007
+167	寿命很长…。是啊…<br>那些人真的都毁灭了吗<br>把我们关禁闭的高等精灵们	VO_zaharu.zaharu_sys_0007
+168	那些人过于执着于那片森林<br>是不是跟森林一起死掉了呢	VO_laetitia.laetitia_sys_0022
+169	…听到故乡毁灭了会伤感吗？	VO_laetitia.laetitia_sys_0001
+170	呵…怎么会呢<br>既不伤感也不开心<br>什么也没感觉	VO_zaharu.zaharu_sys_0010
+171	我也是	VO_laetitia.laetitia_sys_0004
+172	比起这个，我在考虑<br>接下来的事情…	VO_zaharu.zaharu_sys_0002
+173	接下来？	VO_laetitia.laetitia_sys_0006
+174	是…<br>我们精灵的时间很长<br>接下来该怎么生存呢…	VO_zaharu.zaharu_sys_0004
+175	就是在想这个
+176	世界乍看之下非常美丽炫目…<br>但是，即使过了很长时间<br>战争和贫困也无法消除	VO_zaharu.zaharu_sys_0018
+177	别说消除了<br>甚至会变得更加残酷
+178	再加上…森林减少，沙漠化加速<br>这个世界总觉得有些奇怪…<br>必须要做些改变
+179	能做到这一点的，<br>不就是我们长寿的精灵吗？	VO_zaharu.zaharu_sys_0031
+180	跟孩提时候比，我强大了很多<br>也多了很多见识…<br>我有必须要完成的事情
+181	我有这种预感
+182	对…<br>不管你去哪里，<br>我都会跟着你	VO_laetitia.laetitia_sys_0016
+183	恩…一起去吧，姐姐<br>为了改变世界…！	VO_zaharu.zaharu_sys_0004
+184	…？<br>听到什么吗…？	VO_zaharu.zaharu_sys_0006
+185	…叫喊声…<br>是从附近村子来的	VO_laetitia.laetitia_sys_0004
+186	走吧！	VO_zaharu.zaharu_battle_0019
+187	……咕噜噜<br>嘎啊啊!!
+188	魔物啊…！<br>救命啊!!	VO_knightm.knightm_sys_0028
+189	司、司祭大人，圣教骑士大人，<br>还有人在吗!?	VO_knightm.knightm_sys_0018
+190	可恶…！<br>既然如此…就算只有我…！	VO_mob-saga_omale.mog-saga_omale_sys_0042
+191	司祭大人…!?	VO_knightm.knightm_sys_0025
+192	不不，没什么！<br>大家快跑啊!!	VO_mob-saga_omale.mog-saga_omale_sys_0029
+193	村子被袭击了…！<br>走吧，姐姐！<br>去救村子!!	VO_zaharu.zaharu_sys_0027
+194	恩！	VO_laetitia.laetitia_sys_0004
+195	有这么多魔物的话<br>就必须用炼金术了…	VO_zaharu.zaharu_battle_0019
