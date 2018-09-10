@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,10 +25,10 @@ namespace TACTest
             //Diff();
 
             InitJP();
-            InitCN();
+            //InitCN();
 
-            WordList();
-            JsonList();
+            //WordList();
+            //JsonList();
 
             Console.WriteLine("完成");
             Console.ReadLine();
@@ -83,7 +86,7 @@ namespace TACTest
             File.Delete("ASSETLISTJP_new");
 
             Console.WriteLine("生成日服词表");
-            GetLoc("DataJP", "CBJP.txt", colljp.list);
+            GetLoc("DataJP", true, colljp.list);
         }
 
         public static void InitCN()
@@ -104,7 +107,7 @@ namespace TACTest
             File.Delete("ASSETLISTCN_new");
 
             Console.WriteLine("生成国服词表");
-            GetLoc("DataCN", "CBCN.txt", colljp.list);
+            GetLoc("DataCN", false, colljp.list);
         }
 
         public static void WordList()
@@ -378,11 +381,11 @@ namespace TACTest
             }
         }
 
-        public static void GetLoc(string dir, string filename, List<Item> collection)
+        public static void GetLoc(string dir, bool jp, List<Item> collection)
         {
-            using (var wf = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            using (var context = new Context())
             {
-                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i=>i.IDStr))
+                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
                 {
                     using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
                     {
@@ -393,12 +396,37 @@ namespace TACTest
                             var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                             if (a.Length > 1 && s != "\r")
                             {
-                                wf.WriteLine($"{item.IDStr}\t{item.Path}\t{a[0]}\t{a[1]}");
+                                context.TacTrans.Add(jp
+                                    ? new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = DateTime.Now}
+                                    : new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = DateTime.Now});
                             }
                         }
                     }
+
+                    context.SaveChanges();
                 }
             }
+
+
+            //using (var wf = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            //{
+            //    foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i=>i.IDStr))
+            //    {
+            //        using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
+            //        {
+            //            while (!file.EndOfStream)
+            //            {
+            //                var s = file.ReadLine();
+
+            //                var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            //                if (a.Length > 1 && s != "\r")
+            //                {
+            //                    wf.WriteLine($"{item.IDStr}\t{item.Path}\t{a[0]}\t{a[1]}");
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         public static void GetFileList(List<Item> collection, string filename)
@@ -669,5 +697,30 @@ namespace TACTest
         Tower,
         VersusFree,
         VersusRank
+    }
+
+    [Table("TacTrans")]
+    public class TacTrans
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Key { get; set; }
+
+        public string IDStr { get; set; }
+        public string Path { get; set; }
+        public string ID { get; set; }
+        public string JP { get; set; }
+        public string CN { get; set; }
+        public string Trans { get; set; }
+        public DateTime UpdateTime { get; set; }
+    }
+
+    public class Context : DbContext
+    {
+        public Context() : base("MyDbCS")
+        {
+        }
+
+        public DbSet<TacTrans> TacTrans { get; set; }
     }
 }
