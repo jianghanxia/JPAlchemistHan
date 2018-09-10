@@ -383,34 +383,40 @@ namespace TACTest
 
         public static void GetLoc(string dir, bool jp, List<Item> collection)
         {
-            using (var context = new Context())
-            {
-                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
-                {
-                    using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
-                    {
-                        while (!file.EndOfStream)
-                        {
-                            var s = file.ReadLine();
+            var list = new List<TacTrans>();
 
-                            var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                            if (a.Length > 1 && s != "\r")
-                            {
-                                context.TacTrans.Add(jp
-                                    ? new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = DateTime.Now}
-                                    : new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = DateTime.Now});
-                            }
+            var updateTime = DateTime.Now;
+            foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
+            {
+                Console.WriteLine(item.IDStr);
+
+                using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
+                {
+                    while (!file.EndOfStream)
+                    {
+                        var s = file.ReadLine();
+
+                        var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (a.Length > 1 && s != "\r")
+                        {
+                            list.Add(jp
+                                ? new TacTrans { IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = updateTime }
+                                : new TacTrans { IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = updateTime });
                         }
                     }
-
-                    context.SaveChanges();
                 }
             }
 
+            using (var context = new Context())
+            {
+                context.TacTrans.AddRange(list);
+                context.SaveChanges();
+            }
 
-            //using (var wf = new StreamWriter(new FileStream(filename, FileMode.Create, FileAccess.Write), Encoding.UTF8))
+
+            //using (var wf = new StreamWriter(new FileStream("4.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
             //{
-            //    foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i=>i.IDStr))
+            //    foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
             //    {
             //        using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
             //        {
