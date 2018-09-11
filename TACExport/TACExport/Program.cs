@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,8 +10,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExcelDataReader;
 using Ionic.Zlib;
+using LiteDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using FileMode = System.IO.FileMode;
 
 namespace TACTest
 {
@@ -24,7 +23,7 @@ namespace TACTest
         {
             //Diff();
 
-            //InitJP();
+            InitJP();
             InitCN();
 
             //WordList();
@@ -384,28 +383,34 @@ namespace TACTest
         public static void GetLoc(string dir, bool jp, List<Item> collection)
         {
             var updateTime = DateTime.Now;
-            using (var context = new Context())
+
+            List<TacTrans> exitlist;
+            using (var udb = new LiteDatabase(@"MyData.db"))
             {
-                context.Configuration.AutoDetectChangesEnabled = false;
-                context.Configuration.ValidateOnSaveEnabled = false;
+                var ucol = udb.GetCollection<TacTrans>();
+                exitlist = ucol.FindAll().ToList();
+            }
 
-                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
+            foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
+            {
+                Console.WriteLine(item.IDStr);
+
+                using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
                 {
-                    Console.WriteLine(item.IDStr);
-
-                    using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
+                    while (!file.EndOfStream)
                     {
-                        while (!file.EndOfStream)
-                        {
-                            var s = file.ReadLine();
+                        var s = file.ReadLine();
 
-                            var a = s.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
-                            if (a.Length > 1 && s != "\r")
+                        var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (a.Length > 1 && s != "\r")
+                        {
+                            var id = a[0];
+                            using (var db = new LiteDatabase(@"MyData.db"))
                             {
-                                var id = a[0];
-                                if (context.TacTrans.Any(i => i.Path == item.Path && i.ID == id))
+                                var col = db.GetCollection<TacTrans>();
+                                if (exitlist.Exists(i => i.Path == item.Path && i.IDStr == id))
                                 {
-                                    var re = context.TacTrans.First(i => i.Path == item.Path && i.ID == id);
+                                    var re = exitlist.Single(i => i.Path == item.Path && i.IDStr == id);
                                     if (jp)
                                     {
                                         re.JP = a[1];
@@ -416,39 +421,21 @@ namespace TACTest
                                     }
 
                                     re.UpdateTime = updateTime;
+
+                                    col.Update(re);
                                 }
                                 else
                                 {
-                                    context.TacTrans.Add(jp
-                                        ? new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = updateTime}
-                                        : new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = updateTime});
+                                    if (jp)
+                                    {
+                                        col.Insert(new TacTrans { File = item.IDStr, Path = item.Path, IDStr = a[0], JP = a[1], CreateTime = updateTime, UpdateTime = updateTime });
+                                    }
                                 }
                             }
                         }
                     }
-                    context.SaveChanges();
                 }
             }
-
-            //using (var wf = new StreamWriter(new FileStream("4.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-            //{
-            //    foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
-            //    {
-            //        using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
-            //        {
-            //            while (!file.EndOfStream)
-            //            {
-            //                var s = file.ReadLine();
-
-            //                var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-            //                if (a.Length > 1 && s != "\r")
-            //                {
-            //                    wf.WriteLine($"{item.IDStr}\t{item.Path}\t{a[0]}\t{a[1]}");
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         public static void GetFileList(List<Item> collection, string filename)
@@ -613,6 +600,24 @@ namespace TACTest
         }
     }
 
+    public class TacTrans
+    {
+        public int id { get; set; }
+
+        public string File { get; set; }
+
+        public string IDStr { get; set; }
+        public string Path { get; set; }
+
+        public string JP { get; set; }
+
+        public string CN { get; set; }
+        public string Trans { get; set; }
+
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
+    }
+
     public class WikiJson
     {
         public List<WikiData> _embedded { get; set; }
@@ -719,30 +724,5 @@ namespace TACTest
         Tower,
         VersusFree,
         VersusRank
-    }
-
-    [Table("TacTrans")]
-    public class TacTrans
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Key { get; set; }
-
-        public string IDStr { get; set; }
-        public string Path { get; set; }
-        public string ID { get; set; }
-        public string JP { get; set; }
-        public string CN { get; set; }
-        public string Trans { get; set; }
-        public DateTime UpdateTime { get; set; }
-    }
-
-    public class Context : DbContext
-    {
-        public Context() : base("MyDbCS")
-        {
-        }
-
-        public DbSet<TacTrans> TacTrans { get; set; }
     }
 }
