@@ -24,8 +24,8 @@ namespace TACTest
         {
             //Diff();
 
-            InitJP();
-            //InitCN();
+            //InitJP();
+            InitCN();
 
             //WordList();
             //JsonList();
@@ -93,7 +93,7 @@ namespace TACTest
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40048";
+            var code = "40058";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
@@ -383,36 +383,52 @@ namespace TACTest
 
         public static void GetLoc(string dir, bool jp, List<Item> collection)
         {
-            var list = new List<TacTrans>();
-
             var updateTime = DateTime.Now;
-            foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
-            {
-                Console.WriteLine(item.IDStr);
-
-                using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
-                {
-                    while (!file.EndOfStream)
-                    {
-                        var s = file.ReadLine();
-
-                        var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (a.Length > 1 && s != "\r")
-                        {
-                            list.Add(jp
-                                ? new TacTrans { IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = updateTime }
-                                : new TacTrans { IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = updateTime });
-                        }
-                    }
-                }
-            }
-
             using (var context = new Context())
             {
-                context.TacTrans.AddRange(list);
-                context.SaveChanges();
-            }
+                context.Configuration.AutoDetectChangesEnabled = false;
+                context.Configuration.ValidateOnSaveEnabled = false;
 
+                foreach (var item in collection.Where(i => i.Path.StartsWith("Loc/")).OrderBy(i => i.IDStr))
+                {
+                    Console.WriteLine(item.IDStr);
+
+                    using (var file = new StreamReader(new FileStream($"{dir}/{item.IDStr}", FileMode.Open), Encoding.UTF8))
+                    {
+                        while (!file.EndOfStream)
+                        {
+                            var s = file.ReadLine();
+
+                            var a = s.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                            if (a.Length > 1 && s != "\r")
+                            {
+                                var id = a[0];
+                                if (context.TacTrans.Any(i => i.Path == item.Path && i.ID == id))
+                                {
+                                    var re = context.TacTrans.First(i => i.Path == item.Path && i.ID == id);
+                                    if (jp)
+                                    {
+                                        re.JP = a[1];
+                                    }
+                                    else
+                                    {
+                                        re.CN = a[1];
+                                    }
+
+                                    re.UpdateTime = updateTime;
+                                }
+                                else
+                                {
+                                    context.TacTrans.Add(jp
+                                        ? new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], JP = a[1], UpdateTime = updateTime}
+                                        : new TacTrans {IDStr = item.IDStr, Path = item.Path, ID = a[0], CN = a[1], UpdateTime = updateTime});
+                                }
+                            }
+                        }
+                    }
+                    context.SaveChanges();
+                }
+            }
 
             //using (var wf = new StreamWriter(new FileStream("4.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
             //{
