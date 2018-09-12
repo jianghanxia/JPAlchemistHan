@@ -410,19 +410,22 @@ namespace TACTest
                                 var col = db.GetCollection<TacTrans>();
                                 if (exitlist.Exists(i => i.Path == item.Path && i.IDStr == id))
                                 {
-                                    var re = exitlist.Single(i => i.Path == item.Path && i.IDStr == id);
-                                    if (jp)
+                                    var re = exitlist.First(i => i.Path == item.Path && i.IDStr == id);
+                                    if (jp ? re.JP != a[1] : re.CN != a[1])
                                     {
-                                        re.JP = a[1];
-                                    }
-                                    else
-                                    {
-                                        re.CN = a[1];
-                                    }
+                                        if (jp)
+                                        {
+                                            re.JP = a[1];
+                                        }
+                                        else
+                                        {
+                                            re.CN = a[1];
+                                        }
 
-                                    re.UpdateTime = updateTime;
+                                        re.UpdateTime = updateTime;
 
-                                    col.Update(re);
+                                        col.Update(re);
+                                    }
                                 }
                                 else
                                 {
