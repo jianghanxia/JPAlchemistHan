@@ -1,11 +1,16 @@
 ﻿<Application x:Class="TransGUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TransGUI"
-             StartupUri="MainWindow.xaml">
+             xmlns:s="https://github.com/canton7/Stylet"
+             xmlns:local="clr-namespace:TransGUI">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <s:ApplicationLoader>
+                    <s:ApplicationLoader.Bootstrapper>
+                        <local:Bootstrapper  />
+                    </s:ApplicationLoader.Bootstrapper>
+                </s:ApplicationLoader>
                 <!-- Merge in Mahapps Metro styles-->
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
