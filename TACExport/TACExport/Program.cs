@@ -21,6 +21,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
+            //Output();
             //Diff();
 
             InitJP();
@@ -31,6 +32,24 @@ namespace TACTest
 
             Console.WriteLine("完成");
             Console.ReadLine();
+        }
+
+        public static void Output()
+        {
+            List<TacTrans> exitlist;
+            using (var udb = new LiteDatabase(@"MyData.db"))
+            {
+                var ucol = udb.GetCollection<TacTrans>();
+                exitlist = ucol.FindAll().ToList();
+            }
+
+            using (var result = new StreamWriter(new FileStream(@"ResultT.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
+            {
+                foreach (var transe in exitlist)
+                {
+                    result.WriteLine($"{transe.File}\t{transe.IDStr}\t{transe.Path}\t{transe.JP}\t{transe.CN}\t{transe.CreateTime}\t{transe.UpdateTime}");
+                }
+            }
         }
 
         public static void Diff()
@@ -92,7 +111,7 @@ namespace TACTest
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40058";
+            var code = "40109";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
