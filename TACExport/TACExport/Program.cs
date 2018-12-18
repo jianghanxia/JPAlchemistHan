@@ -111,7 +111,7 @@ namespace TACTest
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40109";
+            var code = "40154";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
