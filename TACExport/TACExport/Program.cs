@@ -21,6 +21,8 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
+            OutPutFile();
+            ;
             //Output();
             //Diff();
 
@@ -32,6 +34,170 @@ namespace TACTest
 
             Console.WriteLine("完成");
             Console.ReadLine();
+        }
+
+        private static void OutPutFile()
+        {
+            using (var sReader = new StreamReader(new FileStream("DataJP/49744fd6", FileMode.Open), Encoding.UTF8))
+            {
+                var js = JToken.Parse(sReader.ReadToEnd());
+
+                File.AppendAllText("data\\Ability.json", js["Ability"].ToString(Formatting.None));
+                File.AppendAllText("data\\AbilityRank.json", js["AbilityRank"].ToString(Formatting.None));
+                File.AppendAllText("data\\AI.json", js["AI"].ToString(Formatting.None));
+                File.AppendAllText("data\\AppendUnit.json", js["AppendUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\ArenaDefenseResult.json", js["ArenaDefenseResult"].ToString(Formatting.None));
+                File.AppendAllText("data\\ArenaRankResult.json", js["ArenaRankResult"].ToString(Formatting.None));
+                File.AppendAllText("data\\ArenaWinResult.json", js["ArenaWinResult"].ToString(Formatting.None));
+                File.AppendAllText("data\\Artifact.json", js["Artifact"].ToString(Formatting.None));
+                File.AppendAllText("data\\ArtifactLvTbl.json", js["ArtifactLvTbl"].ToString(Formatting.None));
+                File.AppendAllText("data\\AwakePieceTbl.json", js["AwakePieceTbl"].ToString(Formatting.None));
+                File.AppendAllText("data\\Award.json", js["Award"].ToString(Formatting.None));
+                File.AppendAllText("data\\Banner.json", js["Banner"].ToString(Formatting.None));
+                File.AppendAllText("data\\BreakObj.json", js["BreakObj"].ToString(Formatting.None));
+                File.AppendAllText("data\\Buff.json", js["Buff"].ToString(Formatting.None));
+                File.AppendAllText("data\\Challenge.json", js["Challenge"].ToString(Formatting.None));
+                File.AppendAllText("data\\ChallengeCategory.json", js["ChallengeCategory"].ToString(Formatting.None));
+                File.AppendAllText("data\\CollaboSkill.json", js["CollaboSkill"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCard.json", js["ConceptCard"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardConditions.json", js["ConceptCardConditions"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl1.json", js["ConceptCardLvTbl1"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl2.json", js["ConceptCardLvTbl2"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl3.json", js["ConceptCardLvTbl3"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl4.json", js["ConceptCardLvTbl4"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl5.json", js["ConceptCardLvTbl5"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardLvTbl6.json", js["ConceptCardLvTbl6"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConceptCardTrustReward.json", js["ConceptCardTrustReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\Cond.json", js["Cond"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConvertUnitPieceExclude.json",js["ConvertUnitPieceExclude"].ToString(Formatting.None));
+                File.AppendAllText("data\\CustomTarget.json", js["CustomTarget"].ToString(Formatting.None));
+                File.AppendAllText("data\\DynamicTransformUnit.json", js["DynamicTransformUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\Evaluation.json", js["Evaluation"].ToString(Formatting.None));
+                File.AppendAllText("data\\EventShopUnlock.json", js["EventShopUnlock"].ToString(Formatting.None));
+                File.AppendAllText("data\\Fix.json", js["Fix"].ToString(Formatting.None));
+                File.AppendAllText("data\\FriendPresentItem.json", js["FriendPresentItem"].ToString(Formatting.None));
+                File.AppendAllText("data\\Geo.json", js["Geo"].ToString(Formatting.None));
+                File.AppendAllText("data\\Grow.json", js["Grow"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuildEmblem.json", js["GuildEmblem"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuildFacility.json", js["GuildFacility"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuildFacilityLvTbl.json", js["GuildFacilityLvTbl"].ToString(Formatting.None));
+                //File.AppendAllText("data\\IconMap.json", js["IconMap"].ToString(Formatting.None));
+                File.AppendAllText("data\\InitItem.json", js["InitItem"].ToString(Formatting.None));
+                File.AppendAllText("data\\InitPlayer.json", js["InitPlayer"].ToString(Formatting.None));
+                File.AppendAllText("data\\InitUnit.json", js["InitUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\Item.json", js["Item"].ToString(Formatting.None));
+                File.AppendAllText("data\\Job.json", js["Job"].ToString(Formatting.None));
+                File.AppendAllText("data\\JobGroup.json", js["JobGroup"].ToString(Formatting.None));
+                File.AppendAllText("data\\JobSet.json", js["JobSet"].ToString(Formatting.None));
+                File.AppendAllText("data\\LocalNotification.json", js["LocalNotification"].ToString(Formatting.None));
+                //File.AppendAllText("data\\LocCard.json", js["LocCard"].ToString(Formatting.None));
+                //File.AppendAllText("data\\LocGear.json", js["LocGear"].ToString(Formatting.None));
+                //File.AppendAllText("data\\LocItem.json", js["LocItem"].ToString(Formatting.None));
+                //File.AppendAllText("data\\LocUnit.json", js["LocUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\LoginInfo.json", js["LoginInfo"].ToString(Formatting.None));
+                File.AppendAllText("data\\Mov.json", js["Mov"].ToString(Formatting.None));
+                File.AppendAllText("data\\MultilimitUnitLv.json", js["MultilimitUnitLv"].ToString(Formatting.None));
+                File.AppendAllText("data\\Player.json", js["Player"].ToString(Formatting.None));
+                File.AppendAllText("data\\PlayerLvTbl.json", js["PlayerLvTbl"].ToString(Formatting.None));
+                File.AppendAllText("data\\Premium.json", js["Premium"].ToString(Formatting.None));
+                File.AppendAllText("data\\QuestClearUnlockUnitData.json", js["QuestClearUnlockUnitData"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidAreaClearReward.json", js["RaidAreaClearReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidBattleReward.json", js["RaidBattleReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidBeatReward.json", js["RaidBeatReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidBoss.json", js["RaidBoss"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidCompleteReward.json", js["RaidCompleteReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidDamageRatioReward.json", js["RaidDamageRatioReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidPeriod.json", js["RaidPeriod"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidRescueLevelRange.json", js["RaidRescueLevelRange"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidReward.json", js["RaidReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\Rarity.json", js["Rarity"].ToString(Formatting.None));
+                File.AppendAllText("data\\Recipe.json", js["Recipe"].ToString(Formatting.None));
+                File.AppendAllText("data\\RecommendedArtifact.json", js["RecommendedArtifact"].ToString(Formatting.None));
+                File.AppendAllText("data\\Shop.json", js["Shop"].ToString(Formatting.None));
+                File.AppendAllText("data\\Skill.json", js["Skill"].ToString(Formatting.None));
+                File.AppendAllText("data\\SkillAbilityDerive.json", js["SkillAbilityDerive"].ToString(Formatting.None));
+                File.AppendAllText("data\\SkillMotion.json", js["SkillMotion"].ToString(Formatting.None));
+                File.AppendAllText("data\\StatusCoefficient.json", js["StatusCoefficient"].ToString(Formatting.None));
+                File.AppendAllText("data\\Tips.json", js["Tips"].ToString(Formatting.None));
+                File.AppendAllText("data\\Tobira.json", js["Tobira"].ToString(Formatting.None));
+                File.AppendAllText("data\\TobiraCategories.json", js["TobiraCategories"].ToString(Formatting.None));
+                File.AppendAllText("data\\TobiraConds.json", js["TobiraConds"].ToString(Formatting.None));
+                File.AppendAllText("data\\TobiraCondsUnit.json", js["TobiraCondsUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\TobiraRecipe.json", js["TobiraRecipe"].ToString(Formatting.None));
+                File.AppendAllText("data\\TowerRank.json", js["TowerRank"].ToString(Formatting.None));
+                File.AppendAllText("data\\TowerScore.json", js["TowerScore"].ToString(Formatting.None));
+                File.AppendAllText("data\\Trick.json", js["Trick"].ToString(Formatting.None));
+                File.AppendAllText("data\\Trophy.json", js["Trophy"].ToString(Formatting.None));
+                File.AppendAllText("data\\TrophyCategory.json", js["TrophyCategory"].ToString(Formatting.None));
+                File.AppendAllText("data\\Unit.json", js["Unit"].ToString(Formatting.None));
+                File.AppendAllText("data\\UnitGroup.json", js["UnitGroup"].ToString(Formatting.None));
+                File.AppendAllText("data\\UnitJobOverwrite.json", js["UnitJobOverwrite"].ToString(Formatting.None));
+                File.AppendAllText("data\\UnitLvTbl.json", js["UnitLvTbl"].ToString(Formatting.None));
+                File.AppendAllText("data\\UnitUnlockTime.json", js["UnitUnlockTime"].ToString(Formatting.None));
+                File.AppendAllText("data\\Unlock.json", js["Unlock"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusMatchKey.json", js["VersusMatchKey"].ToString(Formatting.None));
+                File.AppendAllText("data\\Vip.json", js["Vip"].ToString(Formatting.None));
+                File.AppendAllText("data\\Weapon.json", js["Weapon"].ToString(Formatting.None));
+                File.AppendAllText("data\\Weather.json", js["Weather"].ToString(Formatting.None));
+                File.AppendAllText("data\\versuscpu.json", js["versuscpu"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusMatchCond.json", js["VersusMatchCond"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusWinBonus.json", js["VersusWinBonus"].ToString(Formatting.None));
+            }
+
+            using (var sReader = new StreamReader(new FileStream("DataJP/b9cc206f", FileMode.Open), Encoding.UTF8))
+            {
+                var js = JToken.Parse(sReader.ReadToEnd());
+
+                File.AppendAllText("data\\CampaignChildren.json", js["CampaignChildren"].ToString(Formatting.None));
+                File.AppendAllText("data\\CampaignParents.json", js["CampaignParents"].ToString(Formatting.None));
+                File.AppendAllText("data\\CampaignTrust.json", js["CampaignTrust"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuerrillaShopAdventQuest.json",js["GuerrillaShopAdventQuest"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuerrillaShopSchedule.json", js["GuerrillaShopSchedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\MapEffect.json", js["MapEffect"].ToString(Formatting.None));
+                File.AppendAllText("data\\RaidArea.json", js["RaidArea"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRank.json", js["VersusRank"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankClass.json", js["VersusRankClass"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankMission.json", js["VersusRankMission"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankMissionSchedule.json",js["VersusRankMissionSchedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankRankingReward.json",js["VersusRankRankingReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankReward.json", js["VersusRankReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusDraftUnit.json", js["VersusDraftUnit"].ToString(Formatting.None));
+                File.AppendAllText("data\\WeatherSet.json", js["WeatherSet"].ToString(Formatting.None));
+                File.AppendAllText("data\\archives.json", js["archives"].ToString(Formatting.None));
+                File.AppendAllText("data\\areas.json", js["areas"].ToString(Formatting.None));
+                File.AppendAllText("data\\conditions.json", js["conditions"].ToString(Formatting.None));
+                File.AppendAllText("data\\magnifications.json", js["magnifications"].ToString(Formatting.None));
+                File.AppendAllText("data\\multitowerFloor.json", js["multitowerFloor"].ToString(Formatting.None));
+                File.AppendAllText("data\\multitowerRewards.json", js["multitowerRewards"].ToString(Formatting.None));
+                File.AppendAllText("data\\multitowers.json", js["multitowers"].ToString(Formatting.None));
+                File.AppendAllText("data\\objectives.json", js["objectives"].ToString(Formatting.None));
+                File.AppendAllText("data\\parties.json", js["parties"].ToString(Formatting.None));
+                File.AppendAllText("data\\questLobbyNews.json", js["questLobbyNews"].ToString(Formatting.None));
+                File.AppendAllText("data\\quests.json", js["quests"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusrule.json", js["versusrule"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusschedule.json", js["versusschedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusstreakwinbonus.json", js["versusstreakwinbonus"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusstreakwinschedule.json",js["versusstreakwinschedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusTowerFloor.json", js["versusTowerFloor"].ToString(Formatting.None));
+                File.AppendAllText("data\\worlds.json", js["worlds"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusenabletime.json", js["versusenabletime"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusfirstwinbonus.json", js["versusfirstwinbonus"].ToString(Formatting.None));
+                File.AppendAllText("data\\versuscamp.json", js["versuscamp"].ToString(Formatting.None));
+                File.AppendAllText("data\\versuscoin.json", js["versuscoin"].ToString(Formatting.None));
+                File.AppendAllText("data\\versuscoincamp.json", js["versuscoincamp"].ToString(Formatting.None));
+                File.AppendAllText("data\\towerRestCost.json", js["towerRestCost"].ToString(Formatting.None));
+                File.AppendAllText("data\\towerRewards.json", js["towerRewards"].ToString(Formatting.None));
+                File.AppendAllText("data\\towerRoundRewards.json", js["towerRoundRewards"].ToString(Formatting.None));
+                File.AppendAllText("data\\towers.json", js["towers"].ToString(Formatting.None));
+                File.AppendAllText("data\\towerFloors.json", js["towerFloors"].ToString(Formatting.None));
+                File.AppendAllText("data\\towerObjectives.json", js["towerObjectives"].ToString(Formatting.None));
+                //File.AppendAllText("data\\simpleDropTable.json", js["simpleDropTable"].ToString(Formatting.None));
+                //File.AppendAllText("data\\simpleLocalMaps.json", js["simpleLocalMaps"].ToString(Formatting.None));
+                //File.AppendAllText("data\\simpleQuestDrops.json", js["simpleQuestDrops"].ToString(Formatting.None));
+                File.AppendAllText("data\\rankingQuestRewards.json", js["rankingQuestRewards"].ToString(Formatting.None));
+                File.AppendAllText("data\\rankingQuests.json", js["rankingQuests"].ToString(Formatting.None));
+                File.AppendAllText("data\\rankingQuestSchedule.json", js["rankingQuestSchedule"].ToString(Formatting.None));
+            }
         }
 
         public static void Output()
