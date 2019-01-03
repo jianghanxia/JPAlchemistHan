@@ -21,13 +21,14 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            OutPutFile();
-            ;
             //Output();
             //Diff();
 
-            InitJP();
+            //InitJP();
             InitCN();
+
+            //OutPutFile();
+            ;
 
             //WordList();
             //JsonList();
@@ -270,14 +271,14 @@ namespace TACTest
             File.Delete("ASSETLISTJP_new");
 
             Console.WriteLine("生成日服词表");
-            GetLoc("DataJP", true, colljp.list);
+            //GetLoc("DataJP", true, colljp.list);
         }
 
         public static void InitCN()
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40154";
+            var code = "40174";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
