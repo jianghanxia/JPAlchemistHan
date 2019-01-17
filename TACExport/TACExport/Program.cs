@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ExcelDataReader;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Translation.V2;
 using Ionic.Zlib;
 using LiteDB;
 using Newtonsoft.Json;
@@ -28,7 +26,6 @@ namespace TACTest
 
             //InitJP();
             //InitCN();
-            //Google();
             //OutPutFile();
 
             //WordList();
@@ -202,34 +199,6 @@ namespace TACTest
             }
         }
 
-        public static void Google()
-        {
-            var credential = GoogleCredential.FromFile(@"D:\Documents\zorccs-f49e3e3a3998.json");
-            var client = TranslationClient.Create(credential);
-            using (var udb = new LiteDatabase(@"MyData.db"))
-            {
-                var ucol = udb.GetCollection<TacTrans>();
-                var exitlist = ucol.FindAll().ToList();
-
-                var list = exitlist.Where(tac => string.IsNullOrEmpty(tac.CN) && string.IsNullOrEmpty(tac.Trans) && !string.IsNullOrEmpty(tac.JP)).ToList();
-                Console.WriteLine($"{list.Count}");
-
-                for (int i = 0; i < list.Count / 50; i++)
-                {
-                    var lis = list.Skip(50 * i).Take(50).ToList();
-                    var s = client.TranslateText(lis.Select(e => e.JP).ToList(), "zh-cn");
-
-                    for (int j = 0; j < lis.Count(); j++)
-                    {
-                        lis[j].Trans = s[j].TranslatedText;
-                    }
-
-                    ucol.Update(lis);
-                    Console.WriteLine($"{i}/{list.Count / 20}");
-                }
-            }
-        }
-
         public static void Output()
         {
             List<TacTrans> exitlist;
@@ -296,6 +265,8 @@ namespace TACTest
             var colljp = GetCollection("ASSETLISTJP_new");
 
             GetCollectionFile(url, "ASSETLISTJP", "DataJP", colljp.list);
+            GetFileList(colljp.list, "JP.txt");
+
             GetFileAsync($"{url}/b9cc206f", "DataJP/b9cc206f");
             GetFileAsync($"{url}/49744fd6", "DataJP/49744fd6");
 
@@ -310,14 +281,16 @@ namespace TACTest
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "40174";
+            var code = "50035";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
             var colljp = GetCollection("ASSETLISTCN_new");
 
             GetCollectionFile(url, "ASSETLISTCN", "DataCN", colljp.list);
-            GetFileAsync($"{url}/75770103", "DataCN/75770103");
+            GetFileList(colljp.list, "GF.txt");
+
+            GetFileAsync($"{url}/b2cc6a32", "DataCN/b2cc6a32");
             GetFileAsync($"{url}/64a5ea86", "DataCN/64a5ea86");
 
             File.Copy("ASSETLISTCN_new", "ASSETLISTCN", true);
@@ -373,7 +346,7 @@ namespace TACTest
         private static void JsonList()
         {
             Console.WriteLine("解析JSON数据");
-            var qpcn = QuestParam("75770103", "DataCN/75770103");
+            var qpcn = QuestParam("b2cc6a32", "DataCN/b2cc6a32");
             var qpjp = QuestParam("b9cc206f", "DataJP/b9cc206f");
 
             var mpcn = MasterParam("64a5ea86", "DataCN/64a5ea86");
