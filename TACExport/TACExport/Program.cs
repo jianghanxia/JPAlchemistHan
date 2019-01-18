@@ -21,15 +21,15 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            Output();
             //Diff();
 
-            //InitJP();
-            //InitCN();
-            //OutPutFile();
+            InitJP();
+            InitCN();
+            OutPutFile();
 
-            //WordList();
-            //JsonList();
+            JsonList();
+
+            Output();
 
             Console.WriteLine("完成");
             Console.ReadLine();
@@ -298,49 +298,6 @@ namespace TACTest
 
             Console.WriteLine("生成国服词表");
             GetLoc("DataCN", false, colljp.list);
-        }
-
-        public static void WordList()
-        {
-            Console.WriteLine("生成Loc词表");
-
-            var diff = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(@"ResultDiff.txt", FileMode.Open), Encoding.UTF8))
-            {
-                while (!sReader.EndOfStream)
-                {
-                    var res = sReader.ReadLine();
-                    var a = res.Split('\t');
-                    diff.Add(new CBItem { IDstr = a[0], ID = a[1], Chinese = a[2] });
-                }
-            }
-
-            List<CBItem> GFCB = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(@"CBCN.txt", FileMode.Open), Encoding.UTF8))
-            {
-                while (!sReader.EndOfStream)
-                {
-                    var res = sReader.ReadLine();
-                    var a = res.Split('\t');
-                    GFCB.Add(new CBItem { IDstr = a[0], Path = a[1], ID = a[2], Chinese = a[3] });
-                }
-            }
-
-            using (var sReader = new StreamReader(new FileStream(@"CBJP.txt", FileMode.Open), Encoding.UTF8))
-            {
-                using (var result = new StreamWriter(new FileStream(@"ResultLoc.txt", FileMode.Create, FileAccess.Write), Encoding.UTF8))
-                {
-                    while (!sReader.EndOfStream)
-                    {
-                        var res = sReader.ReadLine();
-                        var a = res.Split('\t');
-
-                        var h = GFCB.Where(i => i.Path == a[1] && i.ID == a[2]);
-                        var dh = diff.Where(i => i.IDstr == a[0] && i.ID == a[2]);
-                        result.WriteLine($"{res}\t{(dh.Any() ? dh.First().Chinese : h.Any() ? h.First().Chinese : "")}");
-                    }
-                }
-            }
         }
 
         private static void JsonList()
