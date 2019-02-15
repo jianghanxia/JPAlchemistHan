@@ -24,7 +24,7 @@ namespace TACTest
             //Diff();
 
             InitJP();
-            InitCN();
+            //InitCN();
             OutPutFile();
 
             JsonList();
@@ -274,7 +274,7 @@ namespace TACTest
             File.Delete("ASSETLISTJP_new");
 
             Console.WriteLine("生成日服词表");
-            GetLoc("DataJP", true, colljp.list);
+            //GetLoc("DataJP", true, colljp.list);
         }
 
         public static void InitCN()
