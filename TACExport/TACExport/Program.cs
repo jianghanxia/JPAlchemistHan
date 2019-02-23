@@ -21,6 +21,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
+            ZXXCollectionFile();
             //Diff();
 
             InitJP();
@@ -68,7 +69,7 @@ namespace TACTest
                 File.AppendAllText("data\\ConceptCardLvTbl6.json", js["ConceptCardLvTbl6"].ToString(Formatting.None));
                 File.AppendAllText("data\\ConceptCardTrustReward.json", js["ConceptCardTrustReward"].ToString(Formatting.None));
                 File.AppendAllText("data\\Cond.json", js["Cond"].ToString(Formatting.None));
-                File.AppendAllText("data\\ConvertUnitPieceExclude.json",js["ConvertUnitPieceExclude"].ToString(Formatting.None));
+                File.AppendAllText("data\\ConvertUnitPieceExclude.json", js["ConvertUnitPieceExclude"].ToString(Formatting.None));
                 File.AppendAllText("data\\CustomTarget.json", js["CustomTarget"].ToString(Formatting.None));
                 File.AppendAllText("data\\DynamicTransformUnit.json", js["DynamicTransformUnit"].ToString(Formatting.None));
                 File.AppendAllText("data\\Evaluation.json", js["Evaluation"].ToString(Formatting.None));
@@ -150,15 +151,15 @@ namespace TACTest
                 File.AppendAllText("data\\CampaignChildren.json", js["CampaignChildren"].ToString(Formatting.None));
                 File.AppendAllText("data\\CampaignParents.json", js["CampaignParents"].ToString(Formatting.None));
                 File.AppendAllText("data\\CampaignTrust.json", js["CampaignTrust"].ToString(Formatting.None));
-                File.AppendAllText("data\\GuerrillaShopAdventQuest.json",js["GuerrillaShopAdventQuest"].ToString(Formatting.None));
+                File.AppendAllText("data\\GuerrillaShopAdventQuest.json", js["GuerrillaShopAdventQuest"].ToString(Formatting.None));
                 File.AppendAllText("data\\GuerrillaShopSchedule.json", js["GuerrillaShopSchedule"].ToString(Formatting.None));
                 File.AppendAllText("data\\MapEffect.json", js["MapEffect"].ToString(Formatting.None));
                 File.AppendAllText("data\\RaidArea.json", js["RaidArea"].ToString(Formatting.None));
                 File.AppendAllText("data\\VersusRank.json", js["VersusRank"].ToString(Formatting.None));
                 File.AppendAllText("data\\VersusRankClass.json", js["VersusRankClass"].ToString(Formatting.None));
                 File.AppendAllText("data\\VersusRankMission.json", js["VersusRankMission"].ToString(Formatting.None));
-                File.AppendAllText("data\\VersusRankMissionSchedule.json",js["VersusRankMissionSchedule"].ToString(Formatting.None));
-                File.AppendAllText("data\\VersusRankRankingReward.json",js["VersusRankRankingReward"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankMissionSchedule.json", js["VersusRankMissionSchedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\VersusRankRankingReward.json", js["VersusRankRankingReward"].ToString(Formatting.None));
                 File.AppendAllText("data\\VersusRankReward.json", js["VersusRankReward"].ToString(Formatting.None));
                 File.AppendAllText("data\\VersusDraftUnit.json", js["VersusDraftUnit"].ToString(Formatting.None));
                 File.AppendAllText("data\\WeatherSet.json", js["WeatherSet"].ToString(Formatting.None));
@@ -176,7 +177,7 @@ namespace TACTest
                 File.AppendAllText("data\\versusrule.json", js["versusrule"].ToString(Formatting.None));
                 File.AppendAllText("data\\versusschedule.json", js["versusschedule"].ToString(Formatting.None));
                 File.AppendAllText("data\\versusstreakwinbonus.json", js["versusstreakwinbonus"].ToString(Formatting.None));
-                File.AppendAllText("data\\versusstreakwinschedule.json",js["versusstreakwinschedule"].ToString(Formatting.None));
+                File.AppendAllText("data\\versusstreakwinschedule.json", js["versusstreakwinschedule"].ToString(Formatting.None));
                 File.AppendAllText("data\\versusTowerFloor.json", js["versusTowerFloor"].ToString(Formatting.None));
                 File.AppendAllText("data\\worlds.json", js["worlds"].ToString(Formatting.None));
                 File.AppendAllText("data\\versusenabletime.json", js["versusenabletime"].ToString(Formatting.None));
@@ -229,7 +230,7 @@ namespace TACTest
                 {
                     while (reader.Read())
                     {
-                        CB.Add(new CBItem {IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4)});
+                        CB.Add(new CBItem { IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4) });
                     }
                 } while (reader.NextResult());
             }
@@ -260,6 +261,7 @@ namespace TACTest
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
             var verj = JToken.Parse(GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}"));
             var url = $"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc";
+
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTJP_new");
 
             var colljp = GetCollection("ASSETLISTJP_new");
@@ -275,6 +277,17 @@ namespace TACTest
 
             Console.WriteLine("生成日服词表");
             //GetLoc("DataJP", true, colljp.list);
+        }
+
+        private static void ZXXCollectionFile()
+        {
+            var jwp = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText("response.json"));
+
+            Directory.CreateDirectory("JPG");
+            Parallel.ForEach(jwp._embedded, (item) =>
+            {
+                GetDataAsync($"https://huiji-public.huijistatic.com/tagatame/uploads/{item.icon_dir}/Portraits_{item.img}.png", $"JPG\\{item.iname}.png");
+            });
         }
 
         public static void InitCN()
@@ -875,5 +888,20 @@ namespace TACTest
         Tower,
         VersusFree,
         VersusRank
+    }
+
+
+    public class Rootobject
+    {
+        public List<_Embedded> _embedded { get; set; }
+    }
+
+    public class _Embedded
+    {
+        public string _id { get; set; }
+        public string iname { get; set; }
+        public string name { get; set; }
+        public string img { get; set; }
+        public string icon_dir { get; set; }
     }
 }
