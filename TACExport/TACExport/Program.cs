@@ -21,7 +21,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            ZXXCollectionFile();
+            //ZXXCollectionFile();
             //Diff();
 
             InitJP();
