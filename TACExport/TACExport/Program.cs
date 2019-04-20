@@ -21,7 +21,7 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            ZXXCollectionFile();
+            //ZXXCollectionFile();
             //Diff();
 
             InitJP();
@@ -259,7 +259,7 @@ namespace TACTest
             Console.WriteLine("初始化日服数据");
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var verj = JToken.Parse(GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}"));
+            var verj = JToken.Parse(GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}"));
             var url = $"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc";
 
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTJP_new");
@@ -670,12 +670,11 @@ namespace TACTest
 
                 var request = WebRequest.CreateHttp(url);
                 request.Method = method.ToUpper();
-                request.Accept = "identity";
                 request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
 
                 if (method == "Post" && postData != "")
                 {
-                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.ContentType = "application/json; charset=utf-8";
                     var bytes = Encoding.UTF8.GetBytes(postData);
                     var stream = request.GetRequestStream();
                     stream.Write(bytes, 0, bytes.Length);

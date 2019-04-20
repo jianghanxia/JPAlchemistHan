@@ -21,7 +21,7 @@ namespace AlchemistDMM
             ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"ver={code}");
+            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}");
             var verj = JToken.Parse(ver);
 
             Console.WriteLine("下载ASSETLIST");
@@ -248,7 +248,6 @@ namespace AlchemistDMM
             var request = WebRequest.CreateHttp(url);
 
             request.Method = "GET";
-            request.Accept = "identity";
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
 
             var response = request.GetResponse();
@@ -269,10 +268,11 @@ namespace AlchemistDMM
         {
             var request = WebRequest.CreateHttp(url);
             request.Method = method.ToUpper();
+            request.UserAgent = "alchemist/6.3.0.3 CFNetwork/902.2 Darwin/17.7.0";
 
             if (method == "Post" && postData != "")
             {
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentType = "application/json; charset=utf-8";
                 var bytes = Encoding.UTF8.GetBytes(postData);
                 var stream = request.GetRequestStream();
                 stream.Write(bytes, 0, bytes.Length);
