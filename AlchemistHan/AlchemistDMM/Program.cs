@@ -53,8 +53,8 @@ namespace AlchemistDMM
                 }
             });
 
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f", "Data/b9cc206f");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6", "Data/49744fd6");
+            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
+            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
 
             Console.WriteLine("下载汉化数据");
             GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", "JPResult.xlsx");

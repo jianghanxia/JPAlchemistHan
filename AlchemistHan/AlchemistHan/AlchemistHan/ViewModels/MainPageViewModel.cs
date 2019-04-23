@@ -163,10 +163,10 @@ namespace AlchemistHan.ViewModels
                 {
                     var path = DependencyService.Get<ISystem>().GetLocalFilePath();
 
-                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/b9cc206f",
-                        Path.Combine(path, "b9cc206f"));
-                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/49744fd6",
-                        Path.Combine(path, "49744fd6"));
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa",
+                        Path.Combine(path, "a8a590fa"));
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b",
+                        Path.Combine(path, "f8ed758b"));
 
                     IsBusy = true;
                     Message = "还原数据完成";

@@ -21,12 +21,11 @@ namespace TACTest
     {
         static void Main(string[] args)
         {
-            //ZXXCollectionFile();
             //Diff();
 
             InitJP();
-            //InitCN();
-            OutPutFile();
+            InitCN();
+            //OutPutFile();
 
             JsonList();
 
@@ -38,7 +37,7 @@ namespace TACTest
 
         private static void OutPutFile()
         {
-            using (var sReader = new StreamReader(new FileStream("DataJP/49744fd6", FileMode.Open), Encoding.UTF8))
+            using (var sReader = new StreamReader(new FileStream("DataJP/f8ed758b", FileMode.Open), Encoding.UTF8))
             {
                 var js = JToken.Parse(sReader.ReadToEnd());
 
@@ -144,7 +143,7 @@ namespace TACTest
                 File.AppendAllText("data\\VersusWinBonus.json", js["VersusWinBonus"].ToString(Formatting.None));
             }
 
-            using (var sReader = new StreamReader(new FileStream("DataJP/b9cc206f", FileMode.Open), Encoding.UTF8))
+            using (var sReader = new StreamReader(new FileStream("DataJP/a8a590fa", FileMode.Open), Encoding.UTF8))
             {
                 var js = JToken.Parse(sReader.ReadToEnd());
 
@@ -260,7 +259,7 @@ namespace TACTest
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
             var verj = JToken.Parse(GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}"));
-            var url = $"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc";
+            var url = $"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios";
 
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTJP_new");
 
@@ -269,32 +268,21 @@ namespace TACTest
             GetCollectionFile(url, "ASSETLISTJP", "DataJP", colljp.list);
             GetFileList(colljp.list, "JP.txt");
 
-            GetFileAsync($"{url}/b9cc206f", "DataJP/b9cc206f");
-            GetFileAsync($"{url}/49744fd6", "DataJP/49744fd6");
+            GetFileAsync($"{url}/a8a590fa", "DataJP/a8a590fa");
+            GetFileAsync($"{url}/f8ed758b", "DataJP/f8ed758b");
 
             File.Copy("ASSETLISTJP_new", "ASSETLISTJP", true);
             File.Delete("ASSETLISTJP_new");
 
             Console.WriteLine("生成日服词表");
-            //GetLoc("DataJP", true, colljp.list);
-        }
-
-        private static void ZXXCollectionFile()
-        {
-            var jwp = JsonConvert.DeserializeObject<Rootobject>(File.ReadAllText("response.json"));
-
-            Directory.CreateDirectory("JPG");
-            Parallel.ForEach(jwp._embedded, (item) =>
-            {
-                GetDataAsync($"https://huiji-public.huijistatic.com/tagatame/uploads/{item.icon_dir}/Portraits_{item.img}.png", $"JPG\\{item.iname}.png");
-            });
+            GetLoc("DataJP", true, colljp.list);
         }
 
         public static void InitCN()
         {
             Console.WriteLine("初始化国服数据");
 
-            var code = "50035";
+            var code = "50130";
             var url = $"http://update-alccn-prod.ssl.91dena.cn/assets/{code}/aatc";
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTCN_new");
 
@@ -317,10 +305,10 @@ namespace TACTest
         {
             Console.WriteLine("解析JSON数据");
             var qpcn = QuestParam("b2cc6a32", "DataCN/b2cc6a32");
-            var qpjp = QuestParam("b9cc206f", "DataJP/b9cc206f");
+            var qpjp = QuestParam("a8a590fa", "DataJP/a8a590fa");
 
             var mpcn = MasterParam("64a5ea86", "DataCN/64a5ea86");
-            var mpjp = MasterParam("49744fd6", "DataJP/49744fd6");
+            var mpjp = MasterParam("f8ed758b", "DataJP/f8ed758b");
 
             Console.WriteLine("抓取WIKI数据");
             List<WikiData> unit;
@@ -713,7 +701,7 @@ namespace TACTest
             var request = WebRequest.CreateHttp(url);
 
             request.Method = "GET";
-            request.Accept = "identity";
+            //request.Accept = "identity";
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
 
             var response = request.GetResponse();
@@ -738,7 +726,7 @@ namespace TACTest
             var request = WebRequest.CreateHttp(url);
 
             request.Method = "GET";
-            request.Accept = "identity";
+            //request.Accept = "identity";
             request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
 
             var response = request.GetResponse();
