@@ -17,7 +17,7 @@ namespace AlchemistHan.Droid
 
         public string GetLocalFilePath()
         {
-            return $"{Android.OS.Environment.ExternalStorageDirectory.AbsolutePath}/Android/data/jp.co.gu3.alchemist/files/new_aatc/";
+            return $"{Android.OS.Environment.ExternalStorageDirectory.AbsolutePath}/Android/data/jp.co.gu3.alchemist/files/new_aetc2/";
         }
 
         public string GetPersonalPath()

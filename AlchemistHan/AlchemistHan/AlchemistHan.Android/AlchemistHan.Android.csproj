@@ -41,7 +41,8 @@
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <BundleAssemblies>true</BundleAssemblies>
-    <AndroidSupportedAbis />
+    <AndroidSupportedAbis>
+    </AndroidSupportedAbis>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <MandroidI18n>West</MandroidI18n>
   </PropertyGroup>
