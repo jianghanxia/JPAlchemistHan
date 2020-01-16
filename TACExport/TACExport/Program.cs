@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -11,8 +12,10 @@ using System.Threading.Tasks;
 using ExcelDataReader;
 using Ionic.Zlib;
 using LiteDB;
+using MessagePack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using zlib;
 using FileMode = System.IO.FileMode;
 
 namespace TACTest
@@ -24,9 +27,9 @@ namespace TACTest
             //Diff();
 
             //InitJP();
-            InitCN();
+            //InitCN();
 
-            JsonList();
+            //JsonList();
 
             Output();
 
@@ -49,7 +52,7 @@ namespace TACTest
                 {
                     if (transe.JP != transe.CN && transe.CN != null)
                     {
-                        result.WriteLine($"{transe.File}\t{transe.Path}\t{transe.IDStr}\t{transe.JP}\t{transe.CN}\t{transe.CreateTime}\t{transe.UpdateTime}");
+                        result.WriteLine($"{transe.File}\t{transe.Path}\t{transe.IDStr}\t{transe.JP}\t{transe.CN}");
                     }
                 }
             }
@@ -93,7 +96,7 @@ namespace TACTest
             Console.WriteLine("初始化日服数据");
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var verj = JToken.Parse(GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}"));
+            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
             var url = $"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios";
 
             GetDataAsync($"{url}/ASSETLIST", "ASSETLISTJP_new");
@@ -103,8 +106,8 @@ namespace TACTest
             GetCollectionFile(url, "ASSETLISTJP", "DataJP", colljp.list);
             GetFileList(colljp.list, "JP.txt");
 
-            GetFileAsync($"{url}/a8a590fa", "DataJP/a8a590fa");
-            GetFileAsync($"{url}/f8ed758b", "DataJP/f8ed758b");
+            GetFileAsync($"{url}/4a6996fe", "DataJP/4a6996fe");
+            GetFileAsync($"{url}/c5370707", "DataJP/c5370707");
 
             File.Copy("ASSETLISTJP_new", "ASSETLISTJP", true);
             File.Delete("ASSETLISTJP_new");
@@ -140,10 +143,10 @@ namespace TACTest
         {
             Console.WriteLine("解析JSON数据");
             var qpcn = QuestParam("75b6b983", "DataCN/75b6b983");
-            var qpjp = QuestParam("a8a590fa", "DataJP/a8a590fa");
+            var qpjp = QuestParam("a8a590fa", "DataJP/a8a590fa", true);
 
             var mpcn = MasterParam("faff3a52", "DataCN/faff3a52");
-            var mpjp = MasterParam("f8ed758b", "DataJP/f8ed758b");
+            var mpjp = MasterParam("f8ed758b", "DataJP/f8ed758b", true);
 
             Console.WriteLine("抓取WIKI数据");
             List<WikiData> unit;
@@ -181,112 +184,179 @@ namespace TACTest
             }
         }
 
-        public static List<CBItem> QuestParam(string id, string file)
+        public static List<CBItem> QuestParam(string id, string file, bool jp = false)
         {
             List<CBItem> CB = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
+            JToken js;
+
+            if (jp)
             {
-                var js = JToken.Parse(sReader.ReadToEnd());
-
-                foreach (var a in js["areas"].Children())
+                var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+                var json = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
+                js = JToken.Parse(GetMsgPackFile("4a6996fe", json.SelectToken("body.environments.alchemist.master_digest").ToString()));
+            }
+            else
+            {
+                using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
                 {
-                    CB.Add(new CBItem { IDstr = id, ID = $"areas[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"areas[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+                    js = JToken.Parse(sReader.ReadToEnd());
                 }
+            }
 
-                foreach (var a in js["quests"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].cond", Chinese = $"{a["cond"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].title", Chinese = $"{a["title"]}" });
-                }
+            foreach (var a in js["areas"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"areas[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"areas[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
 
-                foreach (var a in js["towerFloors"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].title", Chinese = $"{a["title"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].cond", Chinese = $"{a["cond"]}" });
-                }
+            foreach (var a in js["quests"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].cond", Chinese = $"{a["cond"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"quests[?(@.iname=='{a["iname"]}')].title", Chinese = $"{a["title"]}" });
+            }
+
+            foreach (var a in js["towerFloors"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].title", Chinese = $"{a["title"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"towerFloors[?(@.iname=='{a["iname"]}')].cond", Chinese = $"{a["cond"]}" });
             }
 
             return CB;
         }
 
-        public static List<CBItem> MasterParam(string id, string file)
+        public static List<CBItem> MasterParam(string id, string file, bool jp = false)
         {
             List<CBItem> CB = new List<CBItem>();
-            using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
+            JToken js;
+
+            if (jp)
             {
-                var js = JToken.Parse(sReader.ReadToEnd());
-
-                foreach (var a in js["Ability"].Children())
+                var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+                var json = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
+                js = JToken.Parse(GetMsgPackFile("c5370707", json.SelectToken("body.environments.alchemist.quest_digest").ToString()));
+            }
+            else
+            {
+                using (var sReader = new StreamReader(new FileStream(file, FileMode.Open), Encoding.UTF8))
                 {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Ability[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"Ability[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                }
-
-                foreach (var a in js["Artifact"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Artifact[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["Award"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Award[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"Award[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                }
-
-                foreach (var a in js["Challenge"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Challenge[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["ConceptCard"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"ConceptCard[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"ConceptCard[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                }
-
-                foreach (var a in js["Item"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Item[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["Job"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Job[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["Skill"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Skill[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"Skill[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                }
-
-                foreach (var a in js["TobiraCategories"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"TobiraCategories[?(@.category=='{a["category"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["Trick"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Trick[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                    CB.Add(new CBItem { IDstr = id, ID = $"Trick[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
-                }
-
-                foreach (var a in js["Trophy"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Trophy[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
-                }
-
-                foreach (var a in js["Unit"].Children())
-                {
-                    CB.Add(new CBItem { IDstr = id, ID = $"Unit[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                    js = JToken.Parse(sReader.ReadToEnd());
                 }
             }
 
+            foreach (var a in js["Ability"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Ability[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"Ability[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
+
+            foreach (var a in js["Artifact"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Artifact[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["Award"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Award[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"Award[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
+
+            foreach (var a in js["Challenge"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Challenge[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["ConceptCard"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"ConceptCard[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"ConceptCard[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
+
+            foreach (var a in js["Item"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Item[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["Job"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Job[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["Skill"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Skill[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"Skill[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
+
+            foreach (var a in js["TobiraCategories"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"TobiraCategories[?(@.category=='{a["category"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["Trick"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Trick[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+                CB.Add(new CBItem { IDstr = id, ID = $"Trick[?(@.iname=='{a["iname"]}')].expr", Chinese = $"{a["expr"]}" });
+            }
+
+            foreach (var a in js["Trophy"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Trophy[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
+            foreach (var a in js["Unit"].Children())
+            {
+                CB.Add(new CBItem { IDstr = id, ID = $"Unit[?(@.iname=='{a["iname"]}')].name", Chinese = $"{a["name"]}" });
+            }
+
             return CB;
+        }
+
+        public static string GetMsgPackFile(string filename, string iv)
+        {
+            var dec = Decompress(filename);
+            var resultArray = AesFile(iv, dec);
+            return MessagePackSerializer.ToJson(resultArray);
+        }
+
+        private static byte[] AesFile(string iv, byte[] data)
+        {
+            RijndaelManaged rDel = new RijndaelManaged
+            {
+                KeySize = 0x80,
+                BlockSize = 0x80,
+                Key = Runtime.GetEncryptionApp(""),
+                IV = Runtime.StringToByteArray(iv),
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7
+            };
+
+            return rDel.CreateDecryptor().TransformFinalBlock(data, 0x10, data.Length - 0x10);
+        }
+
+        public static byte[] Decompress(string inFile)
+        {
+            using (var outStream = new MemoryStream())
+            {
+                using (var zOutputStream = new ZOutputStream(outStream))
+                {
+                    using (var inFileStream = new FileStream(inFile, FileMode.Open))
+                    {
+                        var buffer = new byte[2000];
+                        int len;
+                        while ((len = inFileStream.Read(buffer, 0, 2000)) > 0)
+                        {
+                            zOutputStream.Write(buffer, 0, len);
+                        }
+
+                        zOutputStream.Flush();
+
+                        return outStream.ToArray();
+                    }
+                }
+            }
         }
 
         public static List<WikiData> GetWikiData(string url)
@@ -484,6 +554,40 @@ namespace TACTest
             }
         }
 
+        public static string GetEncWeb(string url, string action, string postData = "")
+        {
+            var u = $"{url}{action}";
+            var request = WebRequest.CreateHttp(u);
+
+            request.Method = "POST";
+            request.ServicePoint.Expect100Continue = false;
+            request.Accept = "*/*";
+            request.UserAgent = "UnityPlayer/5.6.6f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)";
+            request.Headers.Add("X-Unity-Version", "5.6.6f2");
+            request.Headers.Add("Accept-Encoding", "identity");
+            request.Headers.Add("Content-Encoding", "identity");
+
+            if (postData != "")
+            {
+                request.ContentType = "application/octet-stream+jhotuhiahanoatuhinga+fakamunatanga";
+                var bytes = Encoding.UTF8.GetBytes(postData);
+                var stream = request.GetRequestStream();
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            using (var response = request.GetResponse())
+            {
+                using (var stream = response.GetResponseStream())
+                {
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    var dec = ms.ToArray();
+                    return Encoding.UTF8.GetString(Runtime.AesDecrypt(Runtime.GetEncryptionApp(action), dec));
+                }
+            }
+        }
+
         public static string GetWeb(string url, string method = "Get", string postData = "", int errnum = 0)
         {
             try
@@ -583,6 +687,46 @@ namespace TACTest
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             return true; //总是接受     
+        }
+    }
+
+    /// <summary>
+    /// 游戏运行时
+    /// </summary>
+    public sealed class Runtime
+    {
+        static Runtime()
+        {
+        }
+
+        public static byte[] AesEncrypt(byte[] key, byte[] data)
+        {
+            RijndaelManaged rDel = new RijndaelManaged { KeySize = 0x80, BlockSize = 0x80, Key = key, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
+            var transform = rDel.CreateEncryptor();
+            return rDel.IV.Concat(transform.TransformFinalBlock(data, 0, data.Length)).ToArray();
+        }
+
+        public static byte[] AesDecrypt(byte[] key, byte[] data)
+        {
+            var iv = data.Take(16).ToArray();
+            var se = data.Skip(16).ToArray();
+
+            RijndaelManaged rDel = new RijndaelManaged { KeySize = 0x80, BlockSize = 0x80, Key = key, IV = iv, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
+            var resultArray = rDel.CreateDecryptor().TransformFinalBlock(se, 0, se.Length);
+            return resultArray;
+        }
+
+        public static byte[] GetEncryptionApp(string acion)
+        {
+            var app = new byte[] { 0x5F, 0x3E, 0x18, 0xC9, 0xC7, 0xD7, 0x43, 0xE8, 0xC7, 0x0B, 0x55, 0xDD, 0xED, 0xC8, 0x3B, 0xC9 };
+            var ac = Encoding.ASCII.GetBytes(acion);
+            var ha = app.Concat(ac).ToArray();
+            return new SHA256Managed().ComputeHash(ha).Take(16).ToArray();
+        }
+
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();
         }
     }
 
