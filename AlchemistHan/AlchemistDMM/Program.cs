@@ -11,6 +11,7 @@ using ExcelDataReader;
 using Ionic.Zlib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
 
 namespace AlchemistDMM
 {
@@ -21,11 +22,10 @@ namespace AlchemistDMM
             ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}");
-            var verj = JToken.Parse(ver);
+            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
 
             Console.WriteLine("下载ASSETLIST");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST", "ASSETLIST_new");
+            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/ASSETLIST", "ASSETLIST_new");
             var collection = GetCollection("ASSETLIST_new");
 
             (List<Item> list, int ver) oldcol;
@@ -48,17 +48,17 @@ namespace AlchemistDMM
             {
                 if (!File.Exists("Data/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
                 {
-                    GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/{item.IDStr}", "Data/" + item.IDStr);
+                    GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/{item.IDStr}", "Data/" + item.IDStr);
                     Console.WriteLine($"下载{item.IDStr}");
                 }
             });
 
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
 
             Console.WriteLine("下载汉化数据");
             GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", "JPResult.xlsx");
-            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", "JSONWord.gz");
+            //GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", "JSONWord.gz");
 
             if (Directory.Exists("Han"))
             {
@@ -70,7 +70,7 @@ namespace AlchemistDMM
             HanLoc();
 
             //JSON汉化
-            JsonHan();
+            //JsonHan();
 
             File.Copy("ASSETLIST_new", "ASSETLIST", true);
             File.Delete("ASSETLIST_new");
@@ -264,6 +264,40 @@ namespace AlchemistDMM
             response.Close();
         }
 
+        public static string GetEncWeb(string url, string action, string postData = "")
+        {
+            var u = $"{url}{action}";
+            var request = WebRequest.CreateHttp(u);
+
+            request.Method = "POST";
+            request.ServicePoint.Expect100Continue = false;
+            request.Accept = "*/*";
+            request.UserAgent = "UnityPlayer/5.6.6f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)";
+            request.Headers.Add("X-Unity-Version", "5.6.6f2");
+            request.Headers.Add("Accept-Encoding", "identity");
+            request.Headers.Add("Content-Encoding", "identity");
+
+            if (postData != "")
+            {
+                request.ContentType = "application/octet-stream+jhotuhiahanoatuhinga+fakamunatanga";
+                var bytes = Encoding.UTF8.GetBytes(postData);
+                var stream = request.GetRequestStream();
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            using (var response = request.GetResponse())
+            {
+                using (var stream = response.GetResponseStream())
+                {
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    var dec = ms.ToArray();
+                    return Encoding.UTF8.GetString(Runtime.AesDecrypt(Runtime.GetEncryptionApp(action), dec));
+                }
+            }
+        }
+
         public static string GetWeb(string url, string method = "Get", string postData = "")
         {
             var request = WebRequest.CreateHttp(url);
@@ -294,6 +328,31 @@ namespace AlchemistDMM
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
         {
             return true; //总是接受     
+        }
+    }
+
+    public sealed class Runtime
+    {
+        static Runtime()
+        {
+        }
+
+        public static byte[] AesDecrypt(byte[] key, byte[] data)
+        {
+            var iv = data.Take(16).ToArray();
+            var se = data.Skip(16).ToArray();
+
+            RijndaelManaged rDel = new RijndaelManaged { KeySize = 0x80, BlockSize = 0x80, Key = key, IV = iv, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
+            var resultArray = rDel.CreateDecryptor().TransformFinalBlock(se, 0, se.Length);
+            return resultArray;
+        }
+
+        public static byte[] GetEncryptionApp(string acion)
+        {
+            var app = new byte[] { 0x5F, 0x3E, 0x18, 0xC9, 0xC7, 0xD7, 0x43, 0xE8, 0xC7, 0x0B, 0x55, 0xDD, 0xED, 0xC8, 0x3B, 0xC9 };
+            var ac = Encoding.ASCII.GetBytes(acion);
+            var ha = app.Concat(ac).ToArray();
+            return new SHA256Managed().ComputeHash(ha).Take(16).ToArray();
         }
     }
 
