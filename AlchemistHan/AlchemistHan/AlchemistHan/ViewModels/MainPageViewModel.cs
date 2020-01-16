@@ -53,7 +53,7 @@ namespace AlchemistHan.ViewModels
                     Message = "";
                     IsBusy = false;
                     await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JPResult.xlsx"));
-                    await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.gz"));
+                    //await GetFileAsync("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "JSONWord.gz"));
                     await PageDialogService.DisplayAlertAsync("完成", "完成数据下载", "OK");
                     IsBusy = true;
                 }
@@ -111,14 +111,13 @@ namespace AlchemistHan.ViewModels
             DownloadProgress = 0;
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}");
-            var verj = JToken.Parse(ver);
+            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
 
             Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/ASSETLIST",
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/ASSETLIST",
                         Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "ASSETLIST"));
 
                     var collection = GetCollection(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "ASSETLIST"));
@@ -129,7 +128,7 @@ namespace AlchemistHan.ViewModels
                     int ii = 0;
                     foreach (var item in cloc)
                     {
-                        await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/{item.IDStr}",
+                        await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/{item.IDStr}",
                             Path.Combine(path, item.IDStr));
                         DownloadProgress = ii / (float)nc;
                         ii += 1;
@@ -154,8 +153,7 @@ namespace AlchemistHan.ViewModels
             IsBusy = false;
 
             var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var ver = GetWeb("https://alchemist.gu3.jp/chkver2", "Post", $"{{\"ver\":\"{code}\"}}");
-            var verj = JToken.Parse(ver);
+            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
 
             Task.Factory.StartNew(async () =>
             {
@@ -163,9 +161,9 @@ namespace AlchemistHan.ViewModels
                 {
                     var path = DependencyService.Get<ISystem>().GetLocalFilePath();
 
-                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa",
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/a8a590fa",
                         Path.Combine(path, "a8a590fa"));
-                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b",
+                    await GetFileAsync($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/f8ed758b",
                         Path.Combine(path, "f8ed758b"));
 
                     IsBusy = true;
@@ -435,6 +433,40 @@ namespace AlchemistHan.ViewModels
             }
 
             response.Close();
+        }
+
+        public static string GetEncWeb(string url, string action, string postData = "")
+        {
+            var u = $"{url}{action}";
+            var request = WebRequest.CreateHttp(u);
+
+            request.Method = "POST";
+            request.ServicePoint.Expect100Continue = false;
+            request.Accept = "*/*";
+            request.UserAgent = "UnityPlayer/5.6.6f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)";
+            request.Headers.Add("X-Unity-Version", "5.6.6f2");
+            request.Headers.Add("Accept-Encoding", "identity");
+            request.Headers.Add("Content-Encoding", "identity");
+
+            if (postData != "")
+            {
+                request.ContentType = "application/octet-stream+jhotuhiahanoatuhinga+fakamunatanga";
+                var bytes = Encoding.UTF8.GetBytes(postData);
+                var stream = request.GetRequestStream();
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Close();
+            }
+
+            using (var response = request.GetResponse())
+            {
+                using (var stream = response.GetResponseStream())
+                {
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    var dec = ms.ToArray();
+                    return Encoding.UTF8.GetString(Runtime.AesDecrypt(Runtime.GetEncryptionApp(action), dec));
+                }
+            }
         }
 
         public static string GetWeb(string url, string method = "Get", string postData = "")

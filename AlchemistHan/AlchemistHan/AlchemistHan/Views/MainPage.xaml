@@ -17,12 +17,12 @@
         <Label Text="文本汉化包括游戏剧情、界面等。数据汉化包括角色、技能、道具等汉化。相互独立。" />
         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
             <Button Text="文本汉化" Command="{Binding HHCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-            <Button Text="数据汉化" Command="{Binding JsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
+            <!--<Button Text="数据汉化" Command="{Binding JsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />-->
         </StackLayout>
         <Label Text="还原汉化到游戏原始版本，如遇其他情况，请在游戏内修复数据。" Margin="0,20,0,0" />
         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
             <Button Text="还原文本" Command="{Binding RestoreHanCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
-            <Button Text="还原数据" Command="{Binding RestoreJsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />
+            <!--<Button Text="还原数据" Command="{Binding RestoreJsonCommand}" HorizontalOptions="FillAndExpand" IsEnabled="{Binding IsBusy}" />-->
         </StackLayout>
         <ProgressBar IsVisible="{Binding IsDownload}" Progress="{Binding DownloadProgress}" />
         <Label Text="{Binding Message}" />
