@@ -309,15 +309,16 @@ namespace AlchemistHan.ViewModels
                     int ii = 0;
 
                     var path = DependencyService.Get<ISystem>().GetLocalFilePath();
-                    foreach (var file in fl)
+                    Parallel.ForEach(fl, (file) =>
                     {
                         if (File.Exists(Path.Combine(path, file)))
                         {
                             var fcb = cb.Where(i => i.IDstr == file);
+                            var fstr = DateTime.Now.Ticks.ToString();
                             using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine(path, file), FileMode.Open), CompressionMode.Decompress),
                                 Encoding.UTF8))
                             {
-                                using (var f = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), FileMode.Create))
+                                using (var f = File.Open(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), fstr), FileMode.Create))
                                 {
                                     using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                                     {
@@ -325,7 +326,7 @@ namespace AlchemistHan.ViewModels
                                         {
                                             var res = sReader.ReadLine();
 
-                                            var a = res.Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries);
+                                            var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                             if (a.Length > 1 && res != "\r")
                                             {
                                                 var h = fcb.Where(i => i.ID == a[0]);
@@ -346,13 +347,13 @@ namespace AlchemistHan.ViewModels
                                 }
                             }
 
-                            File.Copy(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"), Path.Combine(path, file), true);
-                            File.Delete(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), "temp"));
+                            File.Copy(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), fstr), Path.Combine(path, file), true);
+                            File.Delete(Path.Combine(DependencyService.Get<ISystem>().GetPersonalPath(), fstr));
                         }
 
-                        DownloadProgress = ii / (float) nc;
+                        DownloadProgress = ii / (float)nc;
                         ii += 1;
-                    }
+                    });
 
                     IsDownload = false;
                     IsBusy = true;
