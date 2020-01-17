@@ -17,47 +17,18 @@ namespace AlchemistDMM
 {
     class Program
     {
+        public static List<Item> CollectionJP { get; set; }
+        public static List<Item> CollectionCN { get; set; }
+
         static void Main(string[] args)
         {
             ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
 
-            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
-            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
+            InitJP();
+            InitCN();
 
-            Console.WriteLine("下载ASSETLIST");
-            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/ASSETLIST", "ASSETLIST_new");
-            var collection = GetCollection("ASSETLIST_new");
-
-            (List<Item> list, int ver) oldcol;
-            if (File.Exists("ASSETLIST"))
-            {
-                oldcol = GetCollection("ASSETLIST");
-            }
-            else
-            {
-                if (Directory.Exists("Data"))
-                {
-                    Directory.Delete("Data", true);
-                }
-                oldcol = (new List<Item>(), 0);
-            }
-            Directory.CreateDirectory("Data");
-
-            var cloc = collection.list.Where(i => i.Path.StartsWith("Loc/"));
-            Parallel.ForEach(cloc, (item) =>
-            {
-                if (!File.Exists("Data/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
-                {
-                    GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/{item.IDStr}", "Data/" + item.IDStr);
-                    Console.WriteLine($"下载{item.IDStr}");
-                }
-            });
-
-            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
-            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
-
-            Console.WriteLine("下载汉化数据");
-            GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", "JPResult.xlsx");
+            //Console.WriteLine("下载汉化数据");
+            //GetData("https://jianghanxia.gitee.io/jpalchemisthan/JPResult.xlsx", "JPResult.xlsx");
             //GetData("https://jianghanxia.gitee.io/jpalchemisthan/JSONWord.gz", "JSONWord.gz");
 
             if (Directory.Exists("Han"))
@@ -72,8 +43,7 @@ namespace AlchemistDMM
             //JSON汉化
             //JsonHan();
 
-            File.Copy("ASSETLIST_new", "ASSETLIST", true);
-            File.Delete("ASSETLIST_new");
+            
             File.Delete("JPResult.xlsx");
             File.Delete("JSONWord.gz");
 
@@ -81,37 +51,112 @@ namespace AlchemistDMM
             Console.Read();
         }
 
+        private static void InitJP()
+        {
+            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/ver");
+            var verj = JToken.Parse(GetEncWeb("https://alchemist.gu3.jp", "/chkver2", $"{{\"ver\":\"{code}\"}}"));
+
+            Console.WriteLine("下载日服ASSETLIST");
+            GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/ASSETLIST", "ASSETLISTJP_new");
+            var collection = GetCollection("ASSETLISTJP_new");
+
+            (List<Item> list, int ver) oldcol;
+            if (File.Exists("ASSETLISTJP"))
+            {
+                oldcol = GetCollection("ASSETLISTJP");
+            }
+            else
+            {
+                if (Directory.Exists("DataJP"))
+                {
+                    Directory.Delete("DataJP", true);
+                }
+                oldcol = (new List<Item>(), 0);
+            }
+            Directory.CreateDirectory("DataJP");
+
+            File.Copy("ASSETLISTJP_new", "ASSETLISTJP", true);
+            File.Delete("ASSETLISTJP_new");
+
+            CollectionJP = collection.list.Where(i => i.Path.StartsWith("Loc/")).ToList();
+            Parallel.ForEach(CollectionJP, (item) =>
+            {
+                if (!File.Exists("DataJP/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
+                {
+                    GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/ios/{item.IDStr}", "DataJP/" + item.IDStr);
+                    Console.WriteLine($"下载日服{item.IDStr}");
+                }
+            });
+
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
+            //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
+        }
+
+        private static void InitCN()
+        {
+            var code = GetWeb("https://jianghanxia.gitee.io/jpalchemisthan/gver");
+            var verj = JToken.Parse(GetEncWeb("https://alccn.ssl.91dena.cn", "/chkver2", $@"{{""ver"":""{code}"",""buid"":""1300200110343915""}}"));
+
+            Console.WriteLine("下载国服ASSETLIST");
+            GetData($"http://update-alccn-prod.ssl.91dena.cn/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aetc2/ASSETLIST", "ASSETLISTCN_new");
+            var collection = GetCollection("ASSETLISTCN_new");
+
+            (List<Item> list, int ver) oldcol;
+            if (File.Exists("ASSETLISTCN"))
+            {
+                oldcol = GetCollection("ASSETLISTCN");
+            }
+            else
+            {
+                if (Directory.Exists("DataCN"))
+                {
+                    Directory.Delete("DataCN", true);
+                }
+                oldcol = (new List<Item>(), 0);
+            }
+            Directory.CreateDirectory("DataCN");
+
+            File.Copy("ASSETLISTCN_new", "ASSETLISTCN", true);
+            File.Delete("ASSETLISTCN_new");
+
+            CollectionCN = collection.list.Where(i => i.Path.StartsWith("Loc/")).ToList();
+
+            Parallel.ForEach(CollectionCN, new ParallelOptions { MaxDegreeOfParallelism = 10 }, (item) =>
+            {
+                if (!File.Exists("DataCN/" + item.IDStr) || !oldcol.list.Any(i => i.ID == item.ID && i.Path == item.Path && i.Hash == item.Hash))
+                {
+                    GetData($"http://update-alccn-prod.ssl.91dena.cn/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aetc2/{item.IDStr}", "DataCN/" + item.IDStr);
+                    Console.WriteLine($"下载国服{item.IDStr}");
+                }
+            });
+        }
+
         public static void HanLoc()
         {
-            var cb = new List<CBItem>();
-            using (var stream = File.Open("JPResult.xlsx", FileMode.Open, FileAccess.Read))
+            Parallel.ForEach(CollectionCN, (item) =>
             {
-                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                var cf = new List<CBItem>();
+                using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("DataCN/", item.IDStr), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                 {
-                    do
+                    while (!sReader.EndOfStream)
                     {
-                        while (reader.Read())
+                        var s = sReader.ReadLine();
+                        var a = s.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (a.Length > 1 && s != "\r")
                         {
-                            if (!string.IsNullOrWhiteSpace(reader.GetString(4)))
-                            {
-                                cb.Add(new CBItem { IDstr = reader.GetString(0), ID = reader.GetString(2), Chinese = reader.GetString(4) });
-                            }
+                            cf.Add(new CBItem { ID = a[0], Chinese = a[1] });
                         }
-                    } while (reader.NextResult());
+                    }
                 }
-            }
 
-            var fl = cb.Select(i => i.IDstr).Distinct();
-            foreach (var file in fl)
-            {
-                if (File.Exists("Data/" + file))
+                var jpf = CollectionJP.Single(i => i.Path == item.Path);
+                if (File.Exists("DataJP/" + jpf.IDStr))
                 {
-                    Console.WriteLine($"翻译{file}");
+                    Console.WriteLine($"翻译{jpf.IDStr}");
 
-                    var fcb = cb.Where(i => i.IDstr == file);
-                    using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("Data/", file), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
+                    using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("DataJP/", jpf.IDStr), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                     {
-                        using (var f = File.Open(Path.Combine("Han/", file), FileMode.Create))
+                        using (var f = File.Open(Path.Combine("Han/", jpf.IDStr), FileMode.Create))
                         {
                             using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                             {
@@ -122,7 +167,7 @@ namespace AlchemistDMM
                                     var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
                                     if (a.Length > 1 && res != "\r")
                                     {
-                                        var h = fcb.Where(i => i.ID == a[0]);
+                                        var h = cf.Where(i => i.ID == a[0]);
                                         if (h.Any())
                                         {
                                             a[1] = h.First().Chinese;
@@ -140,7 +185,7 @@ namespace AlchemistDMM
                         }
                     }
                 }
-            }
+            });
         }
 
         public static void JsonHan()
@@ -243,25 +288,38 @@ namespace AlchemistDMM
             }
         }
 
-        public static void GetData(string url, string filename)
+        public static void GetData(string url, string filename, int errnum = 0)
         {
-            var request = WebRequest.CreateHttp(url);
-
-            request.Method = "GET";
-            request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
-
-            var response = request.GetResponse();
-
-            string res;
-            using (var steam = response.GetResponseStream())
+            try
             {
-                using (Stream output = File.Open(filename, FileMode.Create))
-                {
-                    steam.CopyTo(output);
-                }
-            }
+                var request = WebRequest.CreateHttp(url);
 
-            response.Close();
+                request.Method = "GET";
+                request.UserAgent = "Dalvik/2.1.0 (Linux; U; Android 6.0; R11/MRA58K)";
+
+                var response = request.GetResponse();
+
+                using (var steam = response.GetResponseStream())
+                {
+                    using (Stream output = File.Open(filename, FileMode.Create))
+                    {
+                        steam.CopyTo(output);
+                    }
+                }
+
+                response.Close();
+            }
+            catch (Exception e)
+            {
+                if (errnum < 2)
+                {
+                    Task.Delay(1000);
+                    errnum += 1;
+                    GetData(url, filename, errnum);
+                }
+
+                throw e;
+            }
         }
 
         public static string GetEncWeb(string url, string action, string postData = "")
