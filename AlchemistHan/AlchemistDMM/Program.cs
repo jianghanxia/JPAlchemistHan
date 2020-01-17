@@ -12,6 +12,7 @@ using Ionic.Zlib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
+using MessagePack;
 
 namespace AlchemistDMM
 {
@@ -44,8 +45,8 @@ namespace AlchemistDMM
             //JsonHan();
 
             
-            File.Delete("JPResult.xlsx");
-            File.Delete("JSONWord.gz");
+            //File.Delete("JPResult.xlsx");
+            //File.Delete("JSONWord.gz");
 
             Console.WriteLine("汉化完成！");
             Console.Read();
@@ -88,8 +89,12 @@ namespace AlchemistDMM
                 }
             });
 
+            //Data/MasterParamSerialized
+            //Data/QuestParamSerialized
             //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/a8a590fa", "Data/a8a590fa");
             //GetData($"https://alchemist-dlc2.gu3.jp/assets/{verj.SelectToken("body.environments.alchemist.assets")}/aatc/f8ed758b", "Data/f8ed758b");
+            //Runtime.MasterParam = JsonConvert.DeserializeObject<MasterParam>(GetMsgPackFile("4a6996fe", json.SelectToken("body.environments.alchemist.master_digest").ToString()));
+            //Runtime.QuestParam = JsonConvert.DeserializeObject<QuestParam>(GetMsgPackFile("c5370707", json.SelectToken("body.environments.alchemist.quest_digest").ToString()));
         }
 
         private static void InitCN()
@@ -149,36 +154,39 @@ namespace AlchemistDMM
                     }
                 }
 
-                var jpf = CollectionJP.Single(i => i.Path == item.Path);
-                if (File.Exists("DataJP/" + jpf.IDStr))
+                if (CollectionJP.Any(i => i.Path == item.Path))
                 {
-                    Console.WriteLine($"翻译{jpf.IDStr}");
-
-                    using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("DataJP/", jpf.IDStr), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
+                    var jpf = CollectionJP.Single(i => i.Path == item.Path);
+                    if (File.Exists("DataJP/" + jpf.IDStr))
                     {
-                        using (var f = File.Open(Path.Combine("Han/", jpf.IDStr), FileMode.Create))
+                        Console.WriteLine($"翻译{jpf.IDStr}");
+
+                        using (var sReader = new StreamReader(new ZlibStream(new FileStream(Path.Combine("DataJP/", jpf.IDStr), FileMode.Open), CompressionMode.Decompress), Encoding.UTF8))
                         {
-                            using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
+                            using (var f = File.Open(Path.Combine("Han/", jpf.IDStr), FileMode.Create))
                             {
-                                while (!sReader.EndOfStream)
+                                using (var result = new StreamWriter(new ZlibStream(f, CompressionMode.Compress, CompressionLevel.BestCompression), Encoding.UTF8))
                                 {
-                                    var res = sReader.ReadLine();
-
-                                    var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
-                                    if (a.Length > 1 && res != "\r")
+                                    while (!sReader.EndOfStream)
                                     {
-                                        var h = cf.Where(i => i.ID == a[0]);
-                                        if (h.Any())
+                                        var res = sReader.ReadLine();
+
+                                        var a = res.Split(new[] { '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                                        if (a.Length > 1 && res != "\r")
                                         {
-                                            a[1] = h.First().Chinese;
-                                        }
+                                            var h = cf.Where(i => i.ID == a[0]);
+                                            if (h.Any())
+                                            {
+                                                a[1] = h.First().Chinese;
+                                            }
 
-                                        var concat = string.Join("\t", a);
-                                        result.WriteLine(concat);
-                                    }
-                                    else
-                                    {
-                                        result.WriteLine(res);
+                                            var concat = string.Join("\t", a);
+                                            result.WriteLine(concat);
+                                        }
+                                        else
+                                        {
+                                            result.WriteLine(res);
+                                        }
                                     }
                                 }
                             }
@@ -288,6 +296,13 @@ namespace AlchemistDMM
             }
         }
 
+        public static string GetMsgPackFile(string filename, string iv)
+        {
+            var dec = Runtime.Decompress(filename);
+            var resultArray = Runtime.AesFile(iv, dec);
+            return MessagePackSerializer.ToJson(resultArray);
+        }
+
         public static void GetData(string url, string filename, int errnum = 0)
         {
             try
@@ -311,9 +326,9 @@ namespace AlchemistDMM
             }
             catch (Exception e)
             {
-                if (errnum < 2)
+                if (errnum < 3)
                 {
-                    Task.Delay(1000);
+                    Task.Delay(2000);
                     errnum += 1;
                     GetData(url, filename, errnum);
                 }
@@ -395,6 +410,44 @@ namespace AlchemistDMM
         {
         }
 
+        public static byte[] Decompress(string inFile)
+        {
+            using (var outStream = new MemoryStream())
+            {
+                using (var zOutputStream = new ZlibStream(outStream, CompressionMode.Decompress))
+                {
+                    using (var inFileStream = new FileStream(inFile, FileMode.Open))
+                    {
+                        var buffer = new byte[2000];
+                        int len;
+                        while ((len = inFileStream.Read(buffer, 0, 2000)) > 0)
+                        {
+                            zOutputStream.Write(buffer, 0, len);
+                        }
+
+                        zOutputStream.Flush();
+
+                        return outStream.ToArray();
+                    }
+                }
+            }
+        }
+
+        public static byte[] AesFile(string iv, byte[] data)
+        {
+            RijndaelManaged rDel = new RijndaelManaged
+            {
+                KeySize = 0x80,
+                BlockSize = 0x80,
+                Key = GetEncryptionApp(""),
+                IV = StringToByteArray(iv),
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7
+            };
+
+            return rDel.CreateDecryptor().TransformFinalBlock(data, 0x10, data.Length - 0x10);
+        }
+
         public static byte[] AesDecrypt(byte[] key, byte[] data)
         {
             var iv = data.Take(16).ToArray();
@@ -411,6 +464,11 @@ namespace AlchemistDMM
             var ac = Encoding.ASCII.GetBytes(acion);
             var ha = app.Concat(ac).ToArray();
             return new SHA256Managed().ComputeHash(ha).Take(16).ToArray();
+        }
+
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();
         }
     }
 
