@@ -17,7 +17,6 @@ namespace AlchemistHan.Services
             var iv = data.Take(16).ToArray();
             var se = data.Skip(16).ToArray();
             
-            //测试
             RijndaelManaged rDel = new RijndaelManaged { KeySize = 0x80, BlockSize = 0x80, Key = key, IV = iv, Mode = CipherMode.CBC, Padding = PaddingMode.PKCS7 };
             var resultArray = rDel.CreateDecryptor().TransformFinalBlock(se, 0, se.Length);
             return resultArray;
